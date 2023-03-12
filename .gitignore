@@ -3,11 +3,13 @@
 /.pnp
 .pnp.js
 
-.idea
+/.idea
 package-lock.json
 
 # testing
 /coverage
+
+/stay-in-sight.iml
 
 # production
 /build
