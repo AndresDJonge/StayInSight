@@ -2,22 +2,34 @@ import './style/App.css';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import mapboxgl from '!mapbox-gl';
 import {useEffect, useRef, useState} from "react"; // eslint-disable-line import/no-webpack-loader-syntax
-
-mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmVzZGVqb25nZSIsImEiOiJjbGY1ZG9iZGMwOXJmM3NubnZjemdnZWlyIn0.KiF-CdFiCCjeDw49HCDGZg';
+import {cities} from "./data/cities";
+import data from "./data/berlin_weekends.json";
+import env from "react-dotenv";
 
 function App() {
+    mapboxgl.accessToken = env.MAPBOX_API_KEY;
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [lng, setLng] = useState(4.891512042723889);
-    const [lat, setLat] = useState(52.37919398117239);
-    const [zoom, setZoom] = useState(11);
+    const city = cities.find(x => x.key === 'berlin')
+    const [lng, setLng] = useState(city.lng);
+    const [lat, setLat] = useState(city.lat);
+    const [zoom, setZoom] = useState(city.zoom);
 
-    const waypoints = [
-        {lat: 4.90569, lng: 52.41772},
-        {lat: 4.90005, lng: 52.374320000000004},
-        {lat: 4.9751199999999995, lng: 52.36103},
-        {lat: 4.89417, lng: 52.37663}
-    ]
+    const waypoints = data.map(el => {
+        return {
+            type: "Feature",
+            properties: {
+                ...el
+            },
+            geometry: {
+                coordinates: [
+                    el.lng,
+                    el.lat
+                ],
+                type: "Point"
+            }
+        }
+    })
 
     const geoJson = {
         'type': 'geojson',
@@ -181,57 +193,12 @@ function App() {
                         "type": "LineString"
                     }
                 },
-                {
-                    "type": "Feature",
-                    "properties": {},
-                    "geometry": {
-                        "coordinates": [
-                            4.917492216875701,
-                            52.3857992797156
-                        ],
-                        "type": "Point"
-                    }
-                },
-                {
-                    "type": "Feature",
-                    "properties": {},
-                    "geometry": {
-                        "coordinates": [
-                            4.903923420611079,
-                            52.36335483247805
-                        ],
-                        "type": "Point"
-                    }
-                },
-                {
-                    "type": "Feature",
-                    "properties": {},
-                    "geometry": {
-                        "coordinates": [
-                            4.88452203544756,
-                            52.39431947011698
-                        ],
-                        "type": "Point"
-                    }
-                },
-                {
-                    "type": "Feature",
-                    "properties": {},
-                    "geometry": {
-                        "coordinates": [
-                            4.872753878505165,
-                            52.358918558411744
-                        ],
-                        "type": "Point"
-                    }
-                }
+                ...waypoints
             ]
         }
     }
 
-
     useEffect(() => {
-        // TODO change AUB die current!
         if (map.current) return; // initialize map only once
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
@@ -240,7 +207,9 @@ function App() {
             zoom: zoom
         })
         map.current.on('load', () => {
-            // TODO: for each waypoint add to geoJson
+            waypoints.forEach(el => {
+                geoJson.data.features.push(el)
+            })
             map.current.addSource('amsterdam', geoJson)
             map.current.addLayer({
                 'id': 'outline',
