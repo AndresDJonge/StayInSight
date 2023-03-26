@@ -1,4 +1,4 @@
-export const cities = [
+export default [
     {
         'key': 'amsterdam',
         'lng': 4.891512042723889,

@@ -1,0 +1,9 @@
+.books {
+    width: 800px;
+    height: 300px;
+    border: 1px solid #ccc;
+}
+
+button {
+    margin-top: 10px;
+}
