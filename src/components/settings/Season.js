@@ -13,12 +13,9 @@ export default ({ eventKey }) => {
     }
 
     return <Accordion.Item eventKey={eventKey}>
-        <Accordion.Header>
-
-        </Accordion.Header>
+        <Accordion.Header>Season</Accordion.Header>
         <Accordion.Body>
             <Row style={{ "width": "100%", marginLeft: "10px", paddingRight: "10px" }}>
-                <Col className='p-0 pl-1' xs={12}><div className='d-block'>Season</div></Col>
                 <Col className='p-0' xs={12}>
                     <Row class>
                         <Col className='pr-0' xs={4}><FontAwesomeIcon size='2x' icon={faSnowflake} color='#57A5DD' /></Col>
