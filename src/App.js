@@ -9,6 +9,8 @@ import "./style/App.css"
 import Accordion from "./components/Accordion";
 import Summary from "./components/Summary";
 import { findByListingId } from "./azure";
+import env from "react-dotenv";
+
 
 export default () => {
     // a random set of 10 consecutive rooms for testing
@@ -22,12 +24,12 @@ export default () => {
     }
 
     useEffect(() => {
-        console.log(process.env.COSMOS_CONNECTION_STRING)
-
-        const results = findByListingId(16027728)
-        console.log("results: ", results)
+        (async () => {
+            const results = await findByListingId(16027728)
+            console.log("results: ", results)
+        })()
     }, [])
-    useEffect(() => { document.getElementsByClassName("mapboxgl-control-container")[0].remove() }, [])
+    useEffect(() => { console.log("render!"); document.getElementsByClassName("mapboxgl-control-container")[0].remove() }, [])
 
 
     return (

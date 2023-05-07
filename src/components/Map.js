@@ -85,8 +85,8 @@ const parseWaypoints = (values, borders) => Object({
                 },
                 geometry: {
                     coordinates: [
-                        el.lng,
-                        el.lat
+                        el.longitude,
+                        el.latitude
                     ],
                     type: "Point"
                 }
