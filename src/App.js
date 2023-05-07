@@ -8,6 +8,7 @@ import Chart from "./components/DemoBarChart";
 import "./style/App.css"
 import Accordion from "./components/Accordion";
 import Summary from "./components/Summary";
+import { findByListingId } from "./azure";
 
 export default () => {
     // a random set of 10 consecutive rooms for testing
@@ -20,6 +21,12 @@ export default () => {
         setData(data.filter(wp => wp.ID !== id))
     }
 
+    useEffect(() => {
+        console.log(process.env.COSMOS_CONNECTION_STRING)
+
+        const results = findByListingId(16027728)
+        console.log("results: ", results)
+    }, [])
     useEffect(() => { document.getElementsByClassName("mapboxgl-control-container")[0].remove() }, [])
 
 
