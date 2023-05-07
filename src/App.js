@@ -20,7 +20,7 @@ export default () => {
         setData(data.filter(wp => wp.ID !== id))
     }
 
-    useEffect(() => { console.log("render App!") }, [])
+    useEffect(() => { document.getElementsByClassName("mapboxgl-control-container")[0].remove() }, [])
 
 
     return (
@@ -30,7 +30,7 @@ export default () => {
                     <Map {...{ borders, city, removeWaypoint, data, setData }} />
                 </Col>
                 <Col xs={5}>
-                    <Summary/>
+                    <Summary />
                     <Accordion data={data} setData={setData} />
                 </Col>
             </Row>
