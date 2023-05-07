@@ -20,7 +20,7 @@ export default function ({eventKey}) {
                     <ToggleButton
                         className='me-2 rounded'
                         key={radio.value}
-                        id={`radio-${radio.value}`}
+                        id={`roomRadio-${radio.value}`}
                         type="radio"
                         variant={radioValue === radio.value ? 'dark' : 'outline-dark'}
                         name="radio"
