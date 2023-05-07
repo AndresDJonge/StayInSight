@@ -6,6 +6,8 @@ import { Col, Container, Row } from "react-bootstrap";
 import Map from "./components/Map";
 import Chart from "./components/DemoBarChart";
 import "./style/App.css"
+import Accordion from "./components/Accordion";
+import Summary from "./components/Summary";
 
 export default () => {
     // a random set of 10 consecutive rooms for testing
@@ -22,13 +24,14 @@ export default () => {
 
 
     return (
-        <Container fluid>
+        <Container fluid className='mt-2'>
             <Row>
-                <Col xs={6}>
+                <Col xs={7}>
                     <Map {...{ borders, city, removeWaypoint, data, setData }} />
                 </Col>
-                <Col xs={6}>
-                    <Chart {...{ borders, city, removeWaypoint, data, setData }} />
+                <Col xs={5}>
+                    <Summary/>
+                    <Accordion data={data} setData={setData} />
                 </Col>
             </Row>
         </Container>
