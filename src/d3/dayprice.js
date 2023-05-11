@@ -5,7 +5,7 @@ export default (data) => {
         width = 600 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
-    const svg = d3.select("#people-prices")
+    const svg = d3.select("#day-prices")
         .append('svg')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -35,7 +35,7 @@ export default (data) => {
         .attr('text-anchor', 'middle')
         .attr('x', width/2)
         .attr('y', height + margin.top + 20)
-        .text('Maximum Occupancy Limit BnB')
+        .text('# people allowed in the BnB')
 
     /* Y-scale */
     const max = d3.max(Object.keys(accommodationsGroup).map(k => accommodationsGroup[k].length))
@@ -52,7 +52,7 @@ export default (data) => {
         .attr('transform', 'rotate(-90)')
         .attr("x", -height / 2)
         .attr("y", -margin.right)
-        .text('Total Amount Bnbs')
+        .text('Amount of BnBs')
 
     const test = Object.keys(accommodationsGroup).map(k => {
         return {

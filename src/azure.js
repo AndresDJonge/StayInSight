@@ -15,7 +15,7 @@ export const findByListingId = async (id) => {
         ]
     };
 
-    // Get items 
+    // Get items
     const { resources } = await container.items.query(querySpec).fetchAll();
     return resources
 }

@@ -3,6 +3,7 @@ import {Slider} from "@mui/material";
 import {useState} from 'react'
 import {Card} from "react-bootstrap";
 import {CustomToggle} from "../CustomToggle";
+import PricePerDayChart from "../PricePerDayChart";
 
 export default function({eventKey, data, setData}) {
     // TODO: lees de pricerange dynamisch in voor de state
@@ -50,7 +51,9 @@ export default function({eventKey, data, setData}) {
             <CustomToggle eventKey={eventKey}/>
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
-            <Card.Body>Hello! I'm the body</Card.Body>
+            <Card.Body>
+                <PricePerDayChart data={data}/>
+            </Card.Body>
         </Accordion.Collapse>
     </Card>
 }

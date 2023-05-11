@@ -1,12 +1,12 @@
 import {useEffect, useState} from "react"
-import people from "../d3/people"
+import dayprice from "../d3/dayprice"
 import "../style/d3.css"
 
 export default ({ data }) => {
-    const id = 'people-prices'
+    const id = 'day-prices'
 
     useEffect(() => {
-        people(data)
+        dayprice(data)
     }, [])
 
     return <div id={id}/>
