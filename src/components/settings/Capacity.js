@@ -1,16 +1,23 @@
 import Accordion from "react-bootstrap/Accordion";
 import {useState} from 'react'
 import {Slider} from "@mui/material";
+import {Card} from "react-bootstrap";
+import {CustomToggle} from "../CustomToggle";
+import PersonBarChart from "../PersonBarChart";
 
-export default function({eventKey}) {
+export default function ({eventKey, data, setData}) {
     // TODO: lees de personrange dynamisch in voor de state
     const min = 1;
-    const max = 5;
-    const [value, setValue] = useState([min+1, max-1]);
-    const minDistance = 1;
+    const max = 8;
+    const [value, setValue] = useState([min + 1, max - 1]);
+    const minDistance = 0;
 
     function valuetext(value) {
-        return value > 1 ? `${value} persons` : `${value} person`;
+        if (value === 8)
+            return '8+ persons'
+        if (value === 1)
+            return `${value} person`
+        return `${value} persons`
     }
 
     const handleChange = (event, newValue, activeThumb) => {
@@ -23,14 +30,19 @@ export default function({eventKey}) {
         } else {
             setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
         }
+        setData(data
+            .filter(bnb => bnb.accommodates >= newValue[0])
+            .filter(bnb => {
+                return newValue[1] < 8 ? bnb.accommodates <= newValue[1] : bnb;
+            })
+        )
     };
 
-    return <Accordion.Item eventKey={eventKey}>
-        <Accordion.Header>Person Capacity</Accordion.Header>
-        <Accordion.Body>
+    return <Card>
+        <Card.Header className='py-0'>
             <Slider
                 style={{color: '#4E5154'}}
-                className='mt-4 my-2'
+                className='mt-5'
                 getAriaLabel={() => 'Person capacity'}
                 value={value}
                 onChange={handleChange}
@@ -41,6 +53,12 @@ export default function({eventKey}) {
                 min={min}
                 max={max}
             />
-        </Accordion.Body>
-    </Accordion.Item>
+            <CustomToggle eventKey={eventKey}/>
+        </Card.Header>
+        <Accordion.Collapse eventKey={eventKey}>
+            <Card.Body>
+                <PersonBarChart data={data}/>
+            </Card.Body>
+        </Accordion.Collapse>
+    </Card>
 }

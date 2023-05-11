@@ -16,8 +16,8 @@ export default function ({data, setData}) {
             <Rooms eventKey={'1'}/>
             <TypeDay eventKey={'2'}/>
             <Radius eventKey={'3'}/>
-            <Capacity eventKey={'4'}/>
-            <DayPrice eventKey={'5'}/>
+            <Capacity eventKey={'4'} data={data} setData={setData}/>
+            <DayPrice eventKey={'5'} data={data} setData={setData}/>
         </Accordion>
     );
 }

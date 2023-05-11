@@ -1,5 +1,5 @@
 import cities from "./data/cities_coords";
-import _data from "./data/cities/berlin_weekends.json";
+import _data from "./data/cities/los_angeles.json";
 import borders from "./data/borders/amsterdam";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
@@ -9,18 +9,20 @@ import "./style/App.css"
 import Accordion from "./components/Accordion";
 import Summary from "./components/Summary";
 import { findByListingId } from "./azure";
-import env from "react-dotenv";
 
 
 export default () => {
-    // a random set of 10 consecutive rooms for testing
-    const [data, setData] = useState(_data.slice(0, 10))
+    // We need to make a separation between the actual data and what the map shows
+    // because otherwise the filtered data is gone forever!
+    // So always pass 'data' as the actual data, but the setFilteredData as a filter to the components!!!
+    const data = _data;
+    const [filteredData, setFilteredData] = useState(_data)
 
-    const [city, setCity] = useState(cities.find(x => x.key === 'berlin'))
+    const [city, setCity] = useState(cities.find(x => x.key === 'los angeles'))
 
     const removeWaypoint = (id) => {
         console.log("App, removing ", id)
-        setData(data.filter(wp => wp.ID !== id))
+        setFilteredData(data.filter(wp => wp.id !== id))
     }
 
     useEffect(() => {
@@ -36,11 +38,11 @@ export default () => {
         <Container fluid className='mt-2'>
             <Row>
                 <Col xs={7}>
-                    <Map {...{ borders, city, removeWaypoint, data, setData }} />
+                    <Map {...{ borders, city, removeWaypoint, filteredData, setFilteredData }} />
                 </Col>
                 <Col xs={5}>
                     <Summary />
-                    <Accordion data={data} setData={setData} />
+                    <Accordion data={data} setData={setFilteredData} />
                 </Col>
             </Row>
         </Container>

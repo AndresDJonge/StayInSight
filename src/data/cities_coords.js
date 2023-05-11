@@ -1,9 +1,9 @@
 export default [
     {
         'key': 'los angeles',
-        'lng': -118.243683,
-        'lat': 34.052235,
-        'zoom': 9
+        'lng': -118.2,
+        'lat': 34.15,
+        'zoom': 8
     },
     {
         'key': 'amsterdam',

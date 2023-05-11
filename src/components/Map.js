@@ -2,7 +2,7 @@ import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from "react";
 import env from "react-dotenv";
 
-export default ({ borders, city, removeWaypoint, data, setData }) => {
+export default ({ borders, city, removeWaypoint, filteredData, setFilteredData }) => {
     //console.log("passed city: ", city)
     mapboxgl.accessToken = env.MAPBOX_API_KEY;
     const mapContainer = useRef(null);
@@ -12,7 +12,7 @@ export default ({ borders, city, removeWaypoint, data, setData }) => {
     const [zoom, setZoom] = useState(city.zoom);
     const [loaded, setLoaded] = useState(false)
 
-    const EnsureInitialized = (_map) => {
+    const ensureInitialized = (_map) => {
         if (_map.current) return
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
@@ -24,15 +24,15 @@ export default ({ borders, city, removeWaypoint, data, setData }) => {
 
     // load map source once when rendering for the first time
     useEffect(() => {
-        EnsureInitialized(map);
-        map.current.on("load", () => initializeSources(map, city, parseWaypoints(data, borders), setLoaded))
+        ensureInitialized(map);
+        map.current.on("load", () => initializeSources(map, city, parseWaypoints(filteredData, borders), setLoaded))
     }, []);
 
     // reload map source when 'data' hook changes
     useEffect(() => {
-        EnsureInitialized(map);
-        loaded && map.current.getSource(city.key).setData(parseWaypoints(data, borders).data)
-    }, [data, loaded])
+        ensureInitialized(map);
+        loaded && map.current.getSource(city.key).setData(parseWaypoints(filteredData, borders).data)
+    }, [filteredData, loaded])
 
     return <div ref={mapContainer} className="map-container" />;
 }
@@ -41,6 +41,7 @@ export default ({ borders, city, removeWaypoint, data, setData }) => {
 const initializeSources = (map, city, geoJson, setLoaded) => {
     map.current.addSource(city.key, geoJson)
 
+    /* BORDERS */
     map.current.addLayer({
         'id': 'outline',
         'type': 'line',
@@ -52,6 +53,7 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
         }
     });
 
+    /* WAYPOINTS */
     map.current.addLayer({
         'id': 'waypoints',
         'type': 'circle',

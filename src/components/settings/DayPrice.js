@@ -1,8 +1,10 @@
 import Accordion from "react-bootstrap/Accordion";
 import {Slider} from "@mui/material";
 import {useState} from 'react'
+import {Card} from "react-bootstrap";
+import {CustomToggle} from "../CustomToggle";
 
-export default function({eventKey}) {
+export default function({eventKey, data, setData}) {
     // TODO: lees de pricerange dynamisch in voor de state
     const min = 20;
     const max = 220;
@@ -10,7 +12,7 @@ export default function({eventKey}) {
     const minDistance = 30;
 
     function valuetext(value) {
-        return `€ ${value}`;
+        return `$ ${value}`;
     }
 
     const handleChange = (event, newValue, activeThumb) => {
@@ -23,14 +25,18 @@ export default function({eventKey}) {
         } else {
             setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
         }
+
+        setData(data
+            // TODO: with db call?
+            .filter(bnb => bnb)
+        )
     };
 
-    return <Accordion.Item eventKey={eventKey}>
-        <Accordion.Header>Price per Day</Accordion.Header>
-        <Accordion.Body>
+    return <Card>
+        <Card.Header className='py-0'>
             <Slider
                 style={{color: '#4E5154'}}
-                className='mt-4'
+                className='mt-5'
                 getAriaLabel={() => 'Price range'}
                 value={value}
                 onChange={handleChange}
@@ -41,6 +47,10 @@ export default function({eventKey}) {
                 min={min}
                 max={max}
             />
-        </Accordion.Body>
-    </Accordion.Item>
+            <CustomToggle eventKey={eventKey}/>
+        </Card.Header>
+        <Accordion.Collapse eventKey={eventKey}>
+            <Card.Body>Hello! I'm the body</Card.Body>
+        </Accordion.Collapse>
+    </Card>
 }
