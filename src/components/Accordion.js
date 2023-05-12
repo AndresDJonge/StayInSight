@@ -9,9 +9,21 @@ import {useEffect, useState} from "react";
 
 export default function ({data, setData}) {
     const [key, setKey] = useState('4');
+    const [filters, setFilters] = useState([])
 
     /* This is done to only make the accordion scrollable */
     const [maxHeight, setMaxHeight] = useState(400);
+
+    // This filters the data based on all the filters of the accordion
+    // To add a filter, you need an object { id: eventkey, func: filter predicate }
+    const applyFilters = () => {
+        const filteredData = data.filter(item => filters.every(f => f.func(item)))
+        setData(filteredData)
+    }
+
+    useEffect(() => {
+        applyFilters()
+    }, [filters])
 
     useEffect(() => {
         const container = document.getElementById('accordion');
@@ -23,11 +35,11 @@ export default function ({data, setData}) {
     return (
         <Accordion id='accordion' defaultActiveKey={key} className='h-100' style={{ maxHeight: `${maxHeight}px`, overflowY: 'scroll' }}>
             <Season eventKey={'0'}/>
-            <Rooms eventKey={'1'}/>
+            <Rooms eventKey={'1'} data={data} filters={filters} setFilters={setFilters}/>
             <TypeDay eventKey={'2'}/>
             <Radius eventKey={'3'}/>
-            <Capacity eventKey={'4'} data={data} setData={setData}/>
-            <DayPrice eventKey={'5'} data={data} setData={setData}/>
+            <Capacity eventKey={'4'} data={data} filters={filters} setFilters={setFilters}/>
+            <DayPrice eventKey={'5'} data={data} setFilters={setFilters}/>
         </Accordion>
     );
 }

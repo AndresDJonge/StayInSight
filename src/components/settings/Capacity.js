@@ -5,7 +5,7 @@ import {Card} from "react-bootstrap";
 import {CustomToggle} from "../CustomToggle";
 import PersonBarChart from "../PersonBarChart";
 
-export default function ({eventKey, data, setData}) {
+export default function ({eventKey, data, filters, setFilters}) {
     // TODO: lees de personrange dynamisch in voor de state
     const min = 1;
     const max = 8;
@@ -30,18 +30,31 @@ export default function ({eventKey, data, setData}) {
         } else {
             setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
         }
-        setData(data
-            .filter(bnb => bnb.accommodates >= newValue[0])
-            .filter(bnb => {
+
+        // First, remove every filter that has been previously set by this component
+        filters = filters.filter(f => f.id !== `${eventKey}_1`)
+        filters = filters.filter(f => f.id !== `${eventKey}_2`)
+
+        // Second, add new filters to the global filters object
+        filters.push({
+            id: `${eventKey}_1`,
+            func: bnb => bnb.accommodates >= newValue[0]
+        })
+        filters.push({
+            id: `${eventKey}_2`,
+            func: bnb => {
                 return newValue[1] < 8 ? bnb.accommodates <= newValue[1] : bnb;
-            })
-        )
+            }
+        })
+
+        // Finally, set the filters for the accordion
+        setFilters([...filters])
     };
 
     return <Card>
-        <Card.Header className='py-0'>
+        <Card.Header className='py-0 text-center'>
             <Slider
-                style={{color: '#4E5154'}}
+                style={{color: '#4E5154', width: '90%'}}
                 className='mt-5'
                 getAriaLabel={() => 'Person capacity'}
                 value={value}
@@ -57,7 +70,7 @@ export default function ({eventKey, data, setData}) {
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>
-                <PersonBarChart data={data}/>
+                <PersonBarChart data={data} selectedRange={value}/>
             </Card.Body>
         </Accordion.Collapse>
     </Card>

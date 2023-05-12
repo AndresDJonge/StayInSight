@@ -5,7 +5,7 @@ import {Card} from "react-bootstrap";
 import {CustomToggle} from "../CustomToggle";
 import PricePerDayChart from "../PricePerDayChart";
 
-export default function({eventKey, data, setData}) {
+export default function({eventKey, data, filters, setFilters}) {
     // TODO: lees de pricerange dynamisch in voor de state
     const min = 20;
     const max = 220;
@@ -26,11 +26,6 @@ export default function({eventKey, data, setData}) {
         } else {
             setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
         }
-
-        setData(data
-            // TODO: with db call?
-            .filter(bnb => bnb)
-        )
     };
 
     return <Card>

@@ -28,7 +28,7 @@ export default () => {
     useEffect(() => {
         (async () => {
             const results = await findByListingId(16027728)
-            console.log("results: ", results)
+            // console.log("results: ", results)
         })()
     }, [])
     useEffect(() => { console.log("render!"); document.getElementsByClassName("mapboxgl-control-container")[0].remove() }, [])
