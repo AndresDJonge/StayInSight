@@ -29,9 +29,9 @@ export default function({eventKey, data, filters, setFilters}) {
     };
 
     return <Card>
-        <Card.Header className='py-0'>
+        <Card.Header className='py-0 text-center'>
             <Slider
-                style={{color: '#4E5154'}}
+                style={{color: '#4E5154', width: '90%'}}
                 className='mt-5'
                 getAriaLabel={() => 'Price range'}
                 value={value}

@@ -8,7 +8,7 @@ import DayPrice from "./settings/DayPrice";
 import {useEffect, useState} from "react";
 
 export default function ({data, setData}) {
-    const [key, setKey] = useState('4');
+    const [key, setKey] = useState('0');
     const [filters, setFilters] = useState([])
 
     /* This is done to only make the accordion scrollable */

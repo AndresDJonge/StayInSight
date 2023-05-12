@@ -1,6 +1,9 @@
 import Accordion from "react-bootstrap/Accordion";
-import {Button, ButtonGroup, ToggleButton} from "react-bootstrap";
+import {Button, ButtonGroup, Card, ToggleButton} from "react-bootstrap";
 import {useEffect, useState} from "react";
+import {Slider} from "@mui/material";
+import {CustomToggle} from "../CustomToggle";
+import PersonBarChart from "../PersonBarChart";
 
 export default function ({eventKey, data, filters, setFilters}) {
     const [radioValue, setRadioValue] = useState(1);
@@ -25,10 +28,10 @@ export default function ({eventKey, data, filters, setFilters}) {
         setFilters([...filters])
     }, [radioValue])
 
-    return <Accordion.Item eventKey={eventKey}>
-        <Accordion.Header>Rooms</Accordion.Header>
-        <Accordion.Body className='text-center'>
-            <ButtonGroup aria-label='RoomsSelector'>
+    return <Card>
+        <Card.Header className='py-0 text-center'>
+            <div className='lead'>Rooms</div>
+            <ButtonGroup className='mt-3' aria-label='RoomsSelector'>
                 {radios.map(radio => (
                     <ToggleButton
                         className='me-2 rounded'
@@ -44,6 +47,12 @@ export default function ({eventKey, data, filters, setFilters}) {
                     </ToggleButton>
                 ))}
             </ButtonGroup>
-        </Accordion.Body>
-    </Accordion.Item>
+            <CustomToggle eventKey={eventKey}/>
+        </Card.Header>
+        <Accordion.Collapse eventKey={eventKey}>
+            <Card.Body>
+                TODO
+            </Card.Body>
+        </Accordion.Collapse>
+    </Card>
 }

@@ -1,20 +1,21 @@
 import {Slider} from '@mui/material';
 import {useState} from 'react';
-import {Col, Row} from 'react-bootstrap';
+import {Card, Col, Row} from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faSnowflake, faSun} from '@fortawesome/free-regular-svg-icons';
 import {faLeaf} from '@fortawesome/free-solid-svg-icons';
 import {faCanadianMapleLeaf} from '@fortawesome/free-brands-svg-icons';
+import {CustomToggle} from "../CustomToggle";
+import PersonBarChart from "../PersonBarChart";
 
 export default ({eventKey}) => {
     function parseValue(value) {
         return `${value}`;
     }
 
-    return <Accordion.Item eventKey={eventKey}>
-        <Accordion.Header>Season</Accordion.Header>
-        <Accordion.Body>
+    return <Card>
+        <Card.Header>
             <Row style={{"width": "100%", marginLeft: "10px", paddingRight: "10px"}}>
                 <Col className='p-0' xs={12}>
                     <Row>
@@ -49,8 +50,14 @@ export default ({eventKey}) => {
                     />
                 </Col>
             </Row>
-        </Accordion.Body>
-    </Accordion.Item>
+            <CustomToggle eventKey={eventKey}/>
+        </Card.Header>
+        <Accordion.Collapse eventKey={eventKey}>
+            <Card.Body>
+                TODO
+            </Card.Body>
+        </Accordion.Collapse>
+    </Card>
 }
 
 const labels = [
