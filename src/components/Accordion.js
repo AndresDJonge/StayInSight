@@ -5,9 +5,9 @@ import TypeDay from "./settings/TypeDay";
 import Radius from "./settings/Radius";
 import Capacity from "./settings/Capacity";
 import DayPrice from "./settings/DayPrice";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
-export default function ({data, setData}) {
+export default function ({ data, setData }) {
     const [key, setKey] = useState('0');
     const [filters, setFilters] = useState([])
 
@@ -34,12 +34,12 @@ export default function ({data, setData}) {
 
     return (
         <Accordion id='accordion' defaultActiveKey={key} className='h-100' style={{ maxHeight: `${maxHeight}px`, overflowY: 'scroll' }}>
-            <Season eventKey={'0'}/>
-            <Rooms eventKey={'1'} data={data} filters={filters} setFilters={setFilters}/>
-            <TypeDay eventKey={'2'}/>
-            <Radius eventKey={'3'}/>
-            <Capacity eventKey={'4'} data={data} filters={filters} setFilters={setFilters}/>
-            <DayPrice eventKey={'5'} data={data} filters={filters} setFilters={setFilters}/>
+            <Season eventKey={'0'} />
+            <Rooms eventKey={'1'} data={data} filters={filters} setFilters={setFilters} />
+            <TypeDay eventKey={'2'} data={data} setData={setData} />
+            <Radius eventKey={'3'} />
+            <Capacity eventKey={'4'} data={data} filters={filters} setFilters={setFilters} />
+            <DayPrice eventKey={'5'} data={data} filters={filters} setFilters={setFilters} />
         </Accordion>
     );
 }
