@@ -60,7 +60,6 @@ export default (data) => {
             value: accommodationsGroup[k].length,
         }
     })
-    console.log(test)
 
     svg.selectAll("bar")
         .data(test)

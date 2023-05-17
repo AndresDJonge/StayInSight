@@ -8,7 +8,7 @@ import Chart from "./components/DemoBarChart";
 import "./style/App.css"
 import Accordion from "./components/Accordion";
 import Summary from "./components/Summary";
-import { findByListingId } from "./azure";
+import {findByListingId, getAveragePriceByListingIds, getAveragePrices} from "./azure";
 
 
 export default () => {
@@ -27,8 +27,12 @@ export default () => {
 
     useEffect(() => {
         (async () => {
-            const results = await findByListingId(16027728)
+            // const results = await findByListingId(16027728)
             // console.log("results: ", results)
+            // const results = await getAveragePriceByListingIds([13975488, 35266589, 40473603]);
+            // console.log(results[0].$1);
+            // const results = await getAveragePrices([13975488, 35266589, 40473603]);
+            // console.log(results);
         })()
     }, [])
     useEffect(() => { console.log("render!"); document.getElementsByClassName("mapboxgl-control-container")[0].remove() }, [])
@@ -37,10 +41,10 @@ export default () => {
     return (
         <Container fluid className='mt-2'>
             <Row>
-                <Col xs={7}>
+                <Col xs={8}>
                     <Map {...{ borders, city, removeWaypoint, filteredData, setFilteredData }} />
                 </Col>
-                <Col xs={5}>
+                <Col xs={4}>
                     <Summary />
                     <Accordion data={data} setData={setFilteredData} />
                 </Col>

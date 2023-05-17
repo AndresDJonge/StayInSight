@@ -39,7 +39,7 @@ export default function ({data, setData}) {
             <TypeDay eventKey={'2'}/>
             <Radius eventKey={'3'}/>
             <Capacity eventKey={'4'} data={data} filters={filters} setFilters={setFilters}/>
-            <DayPrice eventKey={'5'} data={data} setFilters={setFilters}/>
+            <DayPrice eventKey={'5'} data={data} filters={filters} setFilters={setFilters}/>
         </Accordion>
     );
 }

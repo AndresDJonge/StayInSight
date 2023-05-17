@@ -1,9 +1,10 @@
 import Accordion from "react-bootstrap/Accordion";
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Slider} from "@mui/material";
 import {Card} from "react-bootstrap";
 import {CustomToggle} from "../CustomToggle";
 import PersonBarChart from "../PersonBarChart";
+import {getAveragePriceByListingIds} from "../../azure";
 
 export default function ({eventKey, data, filters, setFilters}) {
     // TODO: lees de personrange dynamisch in voor de state
@@ -11,6 +12,15 @@ export default function ({eventKey, data, filters, setFilters}) {
     const max = 8;
     const [value, setValue] = useState([min + 1, max - 1]);
     const minDistance = 0;
+    const [priceBins, setPriceBins] = useState(null);
+
+    useEffect(() => {
+        getGroupedData(data)
+    }, [])
+
+    useEffect(() => {
+        console.log(priceBins)
+    }, [priceBins])
 
     function valuetext(value) {
         if (value === 8)
@@ -18,6 +28,32 @@ export default function ({eventKey, data, filters, setFilters}) {
         if (value === 1)
             return `${value} person`
         return `${value} persons`
+    }
+
+    function groupByAccomodates(data) {
+        return data.reduce((groups, item) => {
+            const group = (groups[item.accommodates] || [])
+            group.push(item)
+            groups[item.accommodates] = group
+            return groups;
+        }, {});
+    }
+
+    function getPriceByCapacity(capacity){
+        const candidates = data.filter(item => Number(item.accommodates) === Number(capacity)).map(i => i.id)
+        return getAveragePriceByListingIds(candidates);
+    }
+
+    function getGroupedData(data){
+        const accommodationsGroup = groupByAccomodates(data)
+        const promises = Object.keys(accommodationsGroup).map(async k => {
+            const result = await getPriceByCapacity(k)
+            return {
+                persons: k,
+                value: result[0].$1,
+            };
+        });
+        Promise.all(promises).then(data => setPriceBins(data));
     }
 
     const handleChange = (event, newValue, activeThumb) => {
@@ -70,7 +106,7 @@ export default function ({eventKey, data, filters, setFilters}) {
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>
-                <PersonBarChart data={data} selectedRange={value}/>
+                <PersonBarChart data={priceBins} selectedRange={value}/>
             </Card.Body>
         </Accordion.Collapse>
     </Card>

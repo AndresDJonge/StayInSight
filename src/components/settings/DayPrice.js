@@ -1,19 +1,37 @@
 import Accordion from "react-bootstrap/Accordion";
 import {Slider} from "@mui/material";
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Card} from "react-bootstrap";
 import {CustomToggle} from "../CustomToggle";
 import PricePerDayChart from "../PricePerDayChart";
+import {getAveragePrices} from "../../azure";
 
 export default function({eventKey, data, filters, setFilters}) {
     // TODO: lees de pricerange dynamisch in voor de state
-    const min = 20;
-    const max = 220;
-    const [value, setValue] = useState([min+20, max-20]);
+    const [min, setMin] = useState(60);
+    const [max, setMax] = useState(200);
+    const [value, setValue] = useState([min+20, min+50]);
     const minDistance = 30;
+    const [averagePrices, setAveragePrices] = useState(null);
+
+    useEffect(() => {
+        getGroupedData(data)
+    }, [])
+
+    useEffect(() => {
+        console.log(averagePrices)
+    }, [averagePrices])
 
     function valuetext(value) {
         return `$ ${value}`;
+    }
+
+    function inPriceRange(x, low, high){
+        return low <= x && x <= high;
+    }
+
+    function getGroupedData(data) {
+        getAveragePrices(data.map(i => i.id)).then(result => setAveragePrices(result))
     }
 
     const handleChange = (event, newValue, activeThumb) => {
@@ -26,6 +44,15 @@ export default function({eventKey, data, filters, setFilters}) {
         } else {
             setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
         }
+
+        const validBnbs = averagePrices.filter(bnb => inPriceRange(bnb.avg_price, newValue[0], newValue[1])).map(bnb => bnb.listing_id)
+
+        filters = filters.filter(f => f.id !== eventKey)
+        filters.push({
+            id: eventKey,
+            func: bnb => validBnbs.includes(bnb.id)
+        })
+        setFilters([...filters]);
     };
 
     return <Card>

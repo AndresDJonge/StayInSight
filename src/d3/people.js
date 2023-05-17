@@ -12,13 +12,10 @@ export default (data, selectedRange) => {
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    const accommodationsGroup = groupByAccomodates(data);
-
         /* X-scale */
-        let
-    x = d3.scaleBand()
+        let x = d3.scaleBand()
         .range([0, width])
-        .domain(Object.keys(accommodationsGroup))
+        .domain(data.map(i => i.persons))
         .padding(0.2);
 
     /* X-axis */
@@ -34,7 +31,7 @@ export default (data, selectedRange) => {
         .text('Maximum Occupancy Limit BnB')
 
     /* Y-scale */
-    const max = d3.max(Object.keys(accommodationsGroup).map(k => accommodationsGroup[k].length))
+    const max = d3.max(data.map(i => i.value))
     let y = d3.scaleLinear()
         .domain([0, max])
         .range([height, 0]);
@@ -47,13 +44,11 @@ export default (data, selectedRange) => {
         .attr('text-anchor', 'middle')
         .attr('transform', 'rotate(-90)')
         .attr("x", -height / 2)
-        .attr("y", -margin.right)
-        .text('Total Amount Bnbs')
-
-    const groupedData = getGroupedData(data);
+        .attr("y", -margin.right - 5)
+        .text('Price')
 
     const bars = svg.selectAll("bar")
-        .data(groupedData)
+        .data(data)
         .enter()
         .append("rect")
         .attr("x", function (d) {
@@ -66,13 +61,17 @@ export default (data, selectedRange) => {
         .attr("height", function (d) {
             return height - y(d.value);
         })
-        .attr("fill", "#69b3a2");
+        .attr("fill", "#69b3a2")
+        .attr("fill-opacity", d => {
+            if (selectedRange[1] === 8 && d.persons >= 8) return 1
+            return !inRange(d.persons, selectedRange) ? 0.2 : 1
+        });
 
     svg.selectAll("bar-label")
-        .data(groupedData)
+        .data(data)
         .enter()
         .append("text")
-        .text(d => d.value)
+        .text(d => Number(d.value).toFixed(0))
         .attr("x", function (d) {
             return x(d.persons) + (x.bandwidth() / 2);
         })
@@ -83,25 +82,6 @@ export default (data, selectedRange) => {
         .attr('fill', 'black')
 }
 
-function groupByAccomodates(data) {
-    return data.reduce((groups, item) => {
-        const group = (groups[item.accommodates] || [])
-        group.push(item)
-        groups[item.accommodates] = group
-        return groups;
-    }, {});
-}
-
-function getGroupedData(data){
-    const accommodationsGroup = groupByAccomodates(data)
-    return Object.keys(accommodationsGroup).map(k => {
-        return {
-            persons: k,
-            value: accommodationsGroup[k].length,
-        }
-    })
-}
-
 function inRange(x, range) {
     return range[0] <= x && x <= range[1];
 }
@@ -109,9 +89,7 @@ function inRange(x, range) {
 export function updateChart(data, selectedRange) {
     const svg = d3.select("#people-prices");
 
-    const groups = getGroupedData(data);
-
-    const bars = svg.selectAll('rect').data(groups)
+    const bars = svg.selectAll('rect').data(data)
 
     bars.attr("fill-opacity", d => {
         if (selectedRange[1] === 8 && d.persons >= 8) return 1
