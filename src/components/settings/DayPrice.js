@@ -7,20 +7,15 @@ import PricePerDayChart from "../PricePerDayChart";
 import {getAveragePrices} from "../../azure";
 
 export default function({eventKey, data, filters, setFilters}) {
-    // TODO: lees de pricerange dynamisch in voor de state
-    const [min, setMin] = useState(60);
-    const [max, setMax] = useState(200);
-    const [value, setValue] = useState([min+20, min+50]);
+    const min = 0;
+    const max = 750;
+    const [value, setValue] = useState([min+20, max*0.8]);
     const minDistance = 30;
     const [averagePrices, setAveragePrices] = useState(null);
 
     useEffect(() => {
         getGroupedData(data)
     }, [])
-
-    useEffect(() => {
-        console.log(averagePrices)
-    }, [averagePrices])
 
     function valuetext(value) {
         return `$ ${value}`;
@@ -31,7 +26,9 @@ export default function({eventKey, data, filters, setFilters}) {
     }
 
     function getGroupedData(data) {
-        getAveragePrices(data.map(i => i.id)).then(result => setAveragePrices(result))
+        getAveragePrices(data.map(i => i.id)).then(result => {
+            setAveragePrices(result)
+        })
     }
 
     const handleChange = (event, newValue, activeThumb) => {
@@ -74,7 +71,7 @@ export default function({eventKey, data, filters, setFilters}) {
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>
-                <PricePerDayChart data={data}/>
+                <PricePerDayChart data={averagePrices} selectedRange={value}/>
             </Card.Body>
         </Accordion.Collapse>
     </Card>

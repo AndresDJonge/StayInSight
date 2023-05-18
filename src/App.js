@@ -41,10 +41,10 @@ export default () => {
     return (
         <Container fluid className='mt-2'>
             <Row>
-                <Col xs={8}>
+                <Col xs={7}>
                     <Map {...{ borders, city, removeWaypoint, filteredData, setFilteredData }} />
                 </Col>
-                <Col xs={4}>
+                <Col xs={5}>
                     <Summary />
                     <Accordion data={data} setData={setFilteredData} />
                 </Col>
