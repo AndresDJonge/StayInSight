@@ -5,7 +5,7 @@ export default (data, selectedRange) => {
         width = 600 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
-    const svg = d3.select("#people-prices")
+    const svg = d3.select("#radius-prices")
         .append('svg')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -15,7 +15,7 @@ export default (data, selectedRange) => {
         /* X-scale */
         let x = d3.scaleBand()
         .range([0, width])
-        .domain(data.map(i => i.persons))
+        .domain(data.map(i => i.distance))
         .padding(0.2);
 
     /* X-axis */
@@ -37,8 +37,8 @@ export default (data, selectedRange) => {
         .range([height, 0]);
 
     /* Y-axis */
-    //svg.append("g")
-    //    .call(d3.axisLeft(y));
+    svg.append("g")
+        .call(d3.axisLeft(y));
 
     svg.append('text')
         .attr('text-anchor', 'middle')
@@ -52,7 +52,7 @@ export default (data, selectedRange) => {
         .enter()
         .append("rect")
         .attr("x", function (d) {
-            return x(d.persons);
+            return x(d.distance);
         })
         .attr("y", function (d) {
             return y(d.value);
@@ -63,8 +63,8 @@ export default (data, selectedRange) => {
         })
         .attr("fill", "#69b3a2")
         .attr("fill-opacity", d => {
-            if (selectedRange[1] === 8 && d.persons >= 8) return 1
-            return !inRange(d.persons, selectedRange) ? 0.2 : 1
+            if (selectedRange === 40 && d.distance >= 40) return 1
+            return !inRange(d.distance, selectedRange) ? 0.2 : 1
         });
 
     svg.selectAll("bar-label")
@@ -73,7 +73,7 @@ export default (data, selectedRange) => {
         .append("text")
         .text(d => Number(d.value).toFixed(0))
         .attr("x", function (d) {
-            return x(d.persons) + (x.bandwidth() / 2);
+            return x(d.distance) + (x.bandwidth() / 2);
         })
         .attr("y", function (d) {
             return y(d.value) - 10
@@ -83,16 +83,16 @@ export default (data, selectedRange) => {
 }
 
 function inRange(x, range) {
-    return range[0] <= x && x <= range[1];
+    return x <= range;
 }
 
 export function updateChart(data, selectedRange) {
-    const svg = d3.select("#people-prices");
+    const svg = d3.select("#radius-prices");
 
     const bars = svg.selectAll('rect').data(data)
 
     bars.attr("fill-opacity", d => {
-        if (selectedRange[1] === 8 && d.persons >= 8) return 1
-        return !inRange(d.persons, selectedRange) ? 0.2 : 1
+        if (selectedRange === 40 && d.distance >= 40) return 1
+        return !inRange(d.distance, selectedRange) ? 0.2 : 1
     });
 }

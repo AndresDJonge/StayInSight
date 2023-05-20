@@ -3,10 +3,13 @@ import {Slider} from "@mui/material";
 import {useEffect, useState} from 'react'
 import {Card} from "react-bootstrap";
 import {CustomToggle} from "../CustomToggle";
-import PersonBarChart from "../PersonBarChart";
+import RadiusBarChart from "../RadiusBarChart";
+import { groupSort } from "d3";
+import { getAveragePriceByListingIds } from "../../azure";
 
 export default function({eventKey, data, filters, setFilters}) {
     const [value, setValue] = useState(40);
+    const [priceBins, setPriceBins] = useState(null);
     const minDistance = 0;
     const maxDistance = 40;
     const centerLatitude = 34.052235;
@@ -14,7 +17,7 @@ export default function({eventKey, data, filters, setFilters}) {
 
     useEffect(() => 
     {
-        //console.log(value)
+        getGroupedData(data)
     }, [value])
 
 
@@ -64,6 +67,36 @@ export default function({eventKey, data, filters, setFilters}) {
         return `${value}km`
     }
 
+    function groupByDistance(data) {
+        return data.reduce((groups, item) => {
+            var dist = calculateDistance(item.latitude, item.longitude)
+            console.log("Distance: " + dist)
+            const group = (groups[dist] || [])
+            group.push(item)
+            groups[dist] = group
+            return groups;
+        }, {});
+    }
+
+    function getPriceByCapacity(capacity) {
+        const candidates = data.filter(item =>
+            Number(calculateDistance(item.latitude, item.longitude)) === Number(capacity)).map(i => i.id);
+        console.log("Candidat" + candidates)
+        return getAveragePriceByListingIds(candidates);
+    }
+
+    function getGroupedData(data) {
+        const distanceGroups = groupByDistance(data)
+        const promises = Object.keys(distanceGroups).map(async k => {
+            const result = await getPriceByCapacity(k)
+            return {
+                distance: k,
+                value: result[0].$1
+            };
+        });
+        Promise.all(promises).then(data => setPriceBins(data))
+    }
+
     return <Card>
         <Card.Header className='py-0 text-center'>
             <Slider
@@ -84,7 +117,7 @@ export default function({eventKey, data, filters, setFilters}) {
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>
-                TODO
+                <RadiusBarChart data={priceBins} selectedRange={value}/>
             </Card.Body>
         </Accordion.Collapse>
     </Card>
