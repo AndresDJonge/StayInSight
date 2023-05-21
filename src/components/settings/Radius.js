@@ -1,11 +1,11 @@
 import Accordion from "react-bootstrap/Accordion";
-import {Slider} from "@mui/material";
-import {useState} from 'react'
-import {Card} from "react-bootstrap";
-import {CustomToggle} from "../CustomToggle";
-import PersonBarChart from "../PersonBarChart";
+import { Slider } from "@mui/material";
+import { useState } from 'react'
+import { Card } from "react-bootstrap";
+import { CustomToggle } from "../CustomToggle";
+import PersonBarChart from "../CapacityChart";
 
-export default function({eventKey}) {
+export default function ({ eventKey }) {
     const [valuetext, setV] = useState("test")
 
     const marks = [
@@ -34,7 +34,7 @@ export default function({eventKey}) {
     return <Card>
         <Card.Header className='py-0 text-center'>
             <Slider
-                style={{color: '#4E5154', width: '90%'}}
+                style={{ color: '#4E5154', width: '90%' }}
                 className='mt-4'
                 aria-label='Radius'
                 defaultValue={5}
@@ -45,7 +45,7 @@ export default function({eventKey}) {
                 min={1}
                 max={20}
             />
-            <CustomToggle eventKey={eventKey}/>
+            <CustomToggle eventKey={eventKey} />
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>

@@ -1,18 +1,18 @@
 import Accordion from "react-bootstrap/Accordion";
-import {Button, ButtonGroup, Card, ToggleButton} from "react-bootstrap";
-import {useEffect, useState} from "react";
-import {Slider} from "@mui/material";
-import {CustomToggle} from "../CustomToggle";
-import PersonBarChart from "../PersonBarChart";
+import { Button, ButtonGroup, Card, ToggleButton } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Slider } from "@mui/material";
+import { CustomToggle } from "../CustomToggle";
+import drawChart from "../../d3/rooms-chart";
 
-export default function ({eventKey, data, filters, setFilters}) {
+export default function ({ eventKey, data, filters, setFilters }) {
     const [radioValue, setRadioValue] = useState(1);
     const radios = [
-        {name: '1', value: 1},
-        {name: '2', value: 2},
-        {name: '3', value: 3},
-        {name: '4', value: 4},
-        {name: '4+', value: 5},
+        { name: '1', value: 1 },
+        { name: '2', value: 2 },
+        { name: '3', value: 3 },
+        { name: '4', value: 4 },
+        { name: '4+', value: 5 },
     ];
 
     useEffect(() => {
@@ -26,6 +26,7 @@ export default function ({eventKey, data, filters, setFilters}) {
         })
 
         setFilters([...filters])
+        // drawChart([...])
     }, [radioValue])
 
     return <Card>
@@ -47,11 +48,11 @@ export default function ({eventKey, data, filters, setFilters}) {
                     </ToggleButton>
                 ))}
             </ButtonGroup>
-            <CustomToggle eventKey={eventKey}/>
+            <CustomToggle eventKey={eventKey} />
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>
-                TODO
+                <div id="rooms-chart"></div>
             </Card.Body>
         </Accordion.Collapse>
     </Card>

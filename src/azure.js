@@ -33,17 +33,52 @@ export const getAveragePriceByListingIds = async (ids) => {
 
 // Retrieves the average price for each listing provided in the ids list
 export const getAveragePrices = async (ids, dateRange = null) => {
-    const dateClause = dateRange ? `and c.date < ${dateRange[1]} and c.date > ${dateRange[0]}` : "";
+    var dateClause = "("
+
+    if (dateRange !== null)
+        dateRange.forEach(([low, high], i) => {
+            if (i !== 0) dateClause += 'or '
+            dateClause += `(c.date > "${low}" and c.date < "${high}") `
+        });
+    dateClause += ")"
 
     const idList = ids.join(",")
     const querySpec = {
         query: `select c.listing_id, AVG(c.price) as avg_price 
                 from c
                 where c.listing_id in (${idList})
-                ${dateClause}
+                ${dateRange ? "and " + dateClause : ""}
                 group by c.listing_id`
     }
 
+    console.log("appel:", querySpec)
+
     const { resources } = await container.items.query(querySpec).fetchAll();
+    //console.log("Fetched entries: ", resources)
+    return resources;
+}
+
+export const getAveragePricePerDay = async (ids, dateRange = null) => {
+    var dateClause = "("
+
+    if (dateRange !== null)
+        dateRange.forEach(([low, high], i) => {
+            if (i !== 0) dateClause += 'or '
+            dateClause += `(c.date > "${low}" and c.date < "${high}") `
+        });
+    dateClause += ")"
+
+    const idList = ids.join(",")
+
+    const querySpec = {
+        query: `select c.date, AVG(c.price) as avg_price
+                from c
+                where c.listing_id in (${idList})
+                ${dateRange ? "and " + dateClause : ""}
+                group by c.date`
+    }
+
+    const { resources } = await container.items.query(querySpec).fetchAll();
+    //console.log("Fetched entries: ", resources)
     return resources;
 }

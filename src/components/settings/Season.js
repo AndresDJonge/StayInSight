@@ -1,5 +1,5 @@
 import { Slider } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -7,20 +7,47 @@ import { faSnowflake, faSun } from '@fortawesome/free-regular-svg-icons';
 import { faLeaf } from '@fortawesome/free-solid-svg-icons';
 import { faCanadianMapleLeaf } from '@fortawesome/free-brands-svg-icons';
 import { CustomToggle } from "../CustomToggle";
-import PersonBarChart from "../PersonBarChart";
+import _drawChart from "../../d3/seasonprice";
+import { getAveragePrices, getAveragePricePerDay } from "../../azure";
 
 export default ({ eventKey, data, setData }) => {
+    const drawChart = async _ => {
+        const pricePerDay = await getAveragePricePerDay(data.map(c => c["id"]))
+        console.log("input season chart: ", pricePerDay)
+        _drawChart(pricePerDay)
+    }
 
-    const update = newVal => {
-        const range = []
+    const updateAvgPrices = async newVal => {
+        var range = []
 
-        if (newVal === 0) range = [["2023-01-01", "2023-03-19"], ["2023-31-22", "2023-31-31"]]
+        if (newVal === 0) range = [["2023-01-01", "2023-03-19"], ["2023-12-22", "2023-12-31"]]
         if (newVal === 1) range = [["2023-03-20", "2023-06-20"]]
         if (newVal === 2) range = [["2023-06-21", "2023-09-21"]]
         if (newVal === 3) range = [["2023-09-21", "2023-31-21"]]
 
-        const results = getAveragePrices()
+
+        const results = await getAveragePrices(
+            data.map(v => v.id),
+            range
+        )
+
+        console.log("before setting season:", results)
+
+        const copy = Object.entries(data).map(([k, v]) => {
+            var match = results.find(e => e["listing_id"] === v["id"])
+
+            var listing_copy = { ...v }
+            listing_copy["avg_price"] = match["avg_price"]
+            listing_copy["season"] = labels.find(e => e.value === newVal)["label"]
+
+            return (k, listing_copy)
+        })
+
+
+        setData([...copy])
     }
+
+    useEffect(() => { drawChart(0) }, [])
 
     return (
         <Card>
@@ -48,7 +75,7 @@ export default ({ eventKey, data, setData }) => {
                     </Col>
                     <Col xs={12}>
                         <Slider
-                            onChange={(_, newVal) => update(newVal)}
+                            onChange={(_, newVal) => updateAvgPrices(newVal)}
                             style={{ color: '#4E5154' }}
                             track={false}
                             aria-label="Seasons"
@@ -66,7 +93,7 @@ export default ({ eventKey, data, setData }) => {
             </Card.Header>
             <Accordion.Collapse eventKey={eventKey}>
                 <Card.Body>
-                    TODO
+                    <div id="season-chart"></div>
                 </Card.Body>
             </Accordion.Collapse>
         </Card>

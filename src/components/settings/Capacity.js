@@ -1,12 +1,12 @@
 import Accordion from "react-bootstrap/Accordion";
-import {useEffect, useState} from 'react'
-import {Slider} from "@mui/material";
-import {Card} from "react-bootstrap";
-import {CustomToggle} from "../CustomToggle";
-import PersonBarChart from "../PersonBarChart";
-import {getAveragePriceByListingIds} from "../../azure";
+import { useEffect, useState } from 'react'
+import { Slider } from "@mui/material";
+import { Card } from "react-bootstrap";
+import { CustomToggle } from "../CustomToggle";
+import CapacityChart from "../CapacityChart";
+import { getAveragePriceByListingIds } from "../../azure";
 
-export default function ({eventKey, data, filters, setFilters}) {
+export default function ({ eventKey, data, filters, setFilters }) {
     // TODO: lees de personrange dynamisch in voor de state
     const min = 1;
     const max = 8;
@@ -39,12 +39,12 @@ export default function ({eventKey, data, filters, setFilters}) {
         }, {});
     }
 
-    function getPriceByCapacity(capacity){
+    function getPriceByCapacity(capacity) {
         const candidates = data.filter(item => Number(item.accommodates) === Number(capacity)).map(i => i.id)
         return getAveragePriceByListingIds(candidates);
     }
 
-    function getGroupedData(data){
+    function getGroupedData(data) {
         const accommodationsGroup = groupByAccomodates(data)
         const promises = Object.keys(accommodationsGroup).map(async k => {
             const result = await getPriceByCapacity(k)
@@ -90,7 +90,7 @@ export default function ({eventKey, data, filters, setFilters}) {
     return <Card>
         <Card.Header className='py-0 text-center'>
             <Slider
-                style={{color: '#4E5154', width: '90%'}}
+                style={{ color: '#4E5154', width: '90%' }}
                 className='mt-5'
                 getAriaLabel={() => 'Person capacity'}
                 value={value}
@@ -102,11 +102,11 @@ export default function ({eventKey, data, filters, setFilters}) {
                 min={min}
                 max={max}
             />
-            <CustomToggle eventKey={eventKey}/>
+            <CustomToggle eventKey={eventKey} />
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>
-                <PersonBarChart data={priceBins} selectedRange={value}/>
+                <CapacityChart data={priceBins} selectedRange={value} />
             </Card.Body>
         </Accordion.Collapse>
     </Card>

@@ -1,15 +1,15 @@
 import Accordion from "react-bootstrap/Accordion";
-import {useState} from 'react';
-import {ButtonGroup, Card, ToggleButton} from "react-bootstrap";
-import {Slider} from "@mui/material";
-import {CustomToggle} from "../CustomToggle";
-import PersonBarChart from "../PersonBarChart";
+import { useState } from 'react';
+import { ButtonGroup, Card, ToggleButton } from "react-bootstrap";
+import { Slider } from "@mui/material";
+import { CustomToggle } from "../CustomToggle";
+import PersonBarChart from "../CapacityChart";
 
-export default function({eventKey}) {
+export default function ({ eventKey }) {
     const [radioValue, setRadioValue] = useState(1);
     const radios = [
-        {name: 'Weekday', value: 1},
-        {name: 'Weekend', value: 2},
+        { name: 'Weekday', value: 1 },
+        { name: 'Weekend', value: 2 },
     ];
 
     return <Card>
@@ -30,7 +30,7 @@ export default function({eventKey}) {
                     </ToggleButton>
                 ))}
             </ButtonGroup>
-            <CustomToggle eventKey={eventKey}/>
+            <CustomToggle eventKey={eventKey} />
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>
