@@ -1,9 +1,15 @@
 import * as d3 from "d3"
 
-export default (data) => {
-    let margin = {top: 30, right: 30, bottom: 70, left: 50},
+const binSize = 50;
+
+export default (data, selectedRange) => {
+    let margin = {top: 30, right: 30, bottom: 70, left: 10},
         width = 600 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
+
+    const prices = getPrices(data);
+
+    const bins = getBins(prices);
 
     const svg = d3.select("#day-prices")
         .append('svg')
@@ -12,73 +18,97 @@ export default (data) => {
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    const accommodationsGroup = data.reduce((groups, item) => {
-        const group = (groups[item.accommodates] || [])
-        group.push(item)
-        groups[item.accommodates] = group
-        return groups;
-    }, {});
-
     /* X-scale */
-    let x = d3.scaleBand()
-        .range([0, width])
-        .domain(Object.keys(accommodationsGroup))
-        .padding(0.2);
+    let x = d3.scaleLinear()
+        .domain([0, bins.length])
+        .range([0, width]);
 
     /* X-axis */
     svg.append('g')
         .attr('transform', `translate(0, ${height})`)
-        .call(d3.axisBottom(x))
-        .selectAll('text')
-        .style("text-anchor", "end");
+        .call(d3.axisBottom(x).ticks(bins.length).tickFormat(i => {
+            if (i === bins.length) return bins[i-1].end
+            else return bins[i].start
+        }));
+
     svg.append('text')
         .attr('text-anchor', 'middle')
-        .attr('x', width/2)
-        .attr('y', height + margin.top + 20)
-        .text('# people allowed in the BnB')
+        .attr('x', width/2 + margin.left)
+        .attr('y', height + margin.top + margin.bottom / 2)
+        .text('Price bins ($)')
 
     /* Y-scale */
-    const max = d3.max(Object.keys(accommodationsGroup).map(k => accommodationsGroup[k].length))
+    const max = d3.max(bins, bin => bin.count);
     let y = d3.scaleLinear()
         .domain([0, max])
         .range([height, 0]);
 
-    /* Y-axis */
-    svg.append("g")
-        .call(d3.axisLeft(y));
+    // /* Y-axis */
+    // svg.append("g")
+    //     .call(d3.axisLeft(y));
 
-    svg.append('text')
-        .attr('text-anchor', 'middle')
-        .attr('transform', 'rotate(-90)')
-        .attr("x", -height / 2)
-        .attr("y", -margin.right)
-        .text('Amount of BnBs')
-
-    const test = Object.keys(accommodationsGroup).map(k => {
-        return {
-            persons: k,
-            value: accommodationsGroup[k].length,
-        }
-    })
+    // svg.append('text')
+    //     .attr('text-anchor', 'middle')
+    //     .attr('transform', 'rotate(-90)')
+    //     .attr("x", -(height / 2))
+    //     .attr("y", - margin.left - 10)
+    //     .text('Frequency')
 
     svg.selectAll("bar")
-        .data(test)
+        .data(bins)
         .enter()
         .append("rect")
-        .attr("x", function(d) { return x(d.persons); })
-        .attr("y", function(d) { return y(d.value); })
-        .attr("width", x.bandwidth())
-        .attr("height", function(d) { return height - y(d.value); })
-        .attr("fill", "#69b3a2");
+        .attr("x", (bin, i) => x(i))
+        .attr("y", (bin) => y(bin.count))
+        .attr("width", _ => x(1) - x(0))
+        .attr("height", (bin) => height - y(bin.count))
+        .attr("fill", "#69b3a2")
+        .attr("fill-opacity", bin => {
+            return !inRange(bin.start, selectedRange) ? 0.2 : 1
+        });
 
 
     svg.selectAll("bar-label")
-        .data(test)
+        .data(bins)
         .enter()
         .append("text")
-        .text(d => d.value)
-        .attr("x", function(d) { return x(d.persons) + (x.bandwidth()/2); })
-        .attr("y", function(d) { return y(d.value) - 10})
+        .text(d => d.count)
+        .attr("x", function(d, i) { return x(i) + (x(1) - x(0))/2; })
+        .attr("y", function(d) { return y(d.count) - 10})
         .attr('text-anchor', 'middle')
         .attr('fill', 'black')
+}
+
+function getPrices(data){
+    return data.map(i => i.avg_price).filter(i => i <= 750);
+}
+
+function getBins(prices){
+    const bins = Array.from({length: Math.ceil(d3.max(prices) / binSize)}, (_, i) => ({
+        start: i * binSize,
+        end: (i + 1) * binSize,
+        count: 0,
+    }));
+
+    prices.forEach(price => {
+        const bin = bins.find(bin => price > bin.start && price <= bin.end);
+        bin.count++;
+    });
+
+    return bins;
+}
+
+function inRange(x, range) {
+    return range[0] <= x && x <= range[1];
+}
+
+export function updateChart(data, selectedRange) {
+    const svg = d3.select("#day-prices");
+    const prices = getPrices(data);
+    const bins = getBins(prices);
+    const bars = svg.selectAll('rect').data(bins)
+
+    bars.attr("fill-opacity", bin => {
+        return !inRange(bin.start, selectedRange) ? 0.2 : 1
+    });
 }

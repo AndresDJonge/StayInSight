@@ -18,10 +18,6 @@ export default function ({ eventKey, data, filters, setFilters }) {
         getGroupedData(data)
     }, [])
 
-    useEffect(() => {
-        console.log(priceBins)
-    }, [priceBins])
-
     function valuetext(value) {
         if (value === 8)
             return '8+ persons'
