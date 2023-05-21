@@ -13,7 +13,7 @@ export default function ({ staticData, data, setData }) {
     const [loading, setLoading] = useState(false)
 
     /* This is done to only make the accordion scrollable */
-    const [maxHeight, setMaxHeight] = useState(400);
+    // const [maxHeight, setMaxHeight] = useState(400);
 
     // This filters the data based on all the filters of the accordion
     // To add a filter, you need an object { id: eventkey, func: filter predicate }
@@ -26,15 +26,15 @@ export default function ({ staticData, data, setData }) {
         applyFilters()
     }, [filters])
 
-    useEffect(() => {
-        const container = document.getElementById('accordion');
-        const top = container.getBoundingClientRect().top;
-        const remainingHeight = window.innerHeight - top;
-        setMaxHeight(remainingHeight);
-    }, []);
+    // useEffect(() => {
+    //     const container = document.getElementById('accordion');
+    //     const top = container.getBoundingClientRect().top;
+    //     const remainingHeight = window.innerHeight - top;
+    //     setMaxHeight(remainingHeight);
+    // }, []);
 
     return (
-        <Accordion id='accordion' defaultActiveKey={key} className='h-100' style={{ maxHeight: `${maxHeight}px`, overflowY: 'scroll' }}>
+        <Accordion id='accordion' defaultActiveKey={key} className='pb-5' style={{ height: "100vh", overflowY: 'scroll' }}>
             <Season eventKey={'0'} data={data} setData={setData} />
             <Rooms eventKey={'1'} data={data} filters={filters} setFilters={setFilters} />
             <TypeDay eventKey={'2'} />

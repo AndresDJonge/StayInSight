@@ -25,23 +25,15 @@ export default () => {
         setFilteredData(data.filter(wp => wp.id !== id))
     }
 
-    // useEffect(() => {
-    //     (async () => {
-    //         // const results = await findByListingId(16027728)
-    //         // console.log("results: ", results)
-    //         // const results = await getAveragePriceByListingIds([13975488, 35266589, 40473603]);
-    //         // console.log(results[0].$1);
-    //         // const results = await getAveragePrices([13975488, 35266589, 40473603]);
-    //         // console.log(results);
-    //     })()
-    // }, [])
-    // useEffect(() => { console.log("render!"); document.getElementsByClassName("mapboxgl-control-container")[0].remove() }, [])
+    useEffect(() => {
+        document.getElementsByClassName("mapboxgl-control-container")[0].innerHTML = ""
+    }, [])
 
 
     return (
-        <Container fluid className='mt-2'>
+        <Container fluid>
             <Row>
-                <Col xs={7}>
+                <Col xs={8} className="p-0">
                     <Map {...{ borders, city, removeWaypoint, filteredData, setFilteredData }} />
                 </Col>
                 <Col xs={4}>

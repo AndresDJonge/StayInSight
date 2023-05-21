@@ -5,10 +5,12 @@ import "../style/d3.css"
 export default ({ data, selectedRange }) => {
     const id = 'people-prices'
 
+
     // Whenever the data changes -> re-render the chart
     useEffect(() => {
-        if (data !== null)
+        if (data !== null) {
             people(data, selectedRange)
+        }
     }, [data])
 
     // Whenever the range in the slider changes -> update the opacity
