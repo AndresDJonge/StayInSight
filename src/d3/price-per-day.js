@@ -3,15 +3,19 @@ import * as d3 from "d3"
 const binSize = 50;
 
 export default (data, selectedRange) => {
-    let margin = {top: 30, right: 30, bottom: 70, left: 10},
-        width = 600 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+    // width of the card itsef (card body is collapsed and has width 0)
+    document.getElementById("price-per-day").innerHTML = ""
+    const realWidth = document.getElementById("price-per-day").parentElement.parentElement.parentElement.offsetWidth
+
+    let margin = { top: 30, right: 40, bottom: 70, left: 40 },
+        width = realWidth - margin.left - margin.right,
+        height = ((4 / 6) * realWidth) - margin.top - margin.bottom;
 
     const prices = getPrices(data);
 
     const bins = getBins(prices);
 
-    const svg = d3.select("#day-prices")
+    const svg = d3.select("#price-per-day")
         .append('svg')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -27,13 +31,13 @@ export default (data, selectedRange) => {
     svg.append('g')
         .attr('transform', `translate(0, ${height})`)
         .call(d3.axisBottom(x).ticks(bins.length).tickFormat(i => {
-            if (i === bins.length) return bins[i-1].end
+            if (i === bins.length) return bins[i - 1].end
             else return bins[i].start
         }));
 
     svg.append('text')
         .attr('text-anchor', 'middle')
-        .attr('x', width/2 + margin.left)
+        .attr('x', width / 2 + margin.left)
         .attr('y', height + margin.top + margin.bottom / 2)
         .text('Price bins ($)')
 
@@ -73,18 +77,18 @@ export default (data, selectedRange) => {
         .enter()
         .append("text")
         .text(d => d.count)
-        .attr("x", function(d, i) { return x(i) + (x(1) - x(0))/2; })
-        .attr("y", function(d) { return y(d.count) - 10})
+        .attr("x", function (d, i) { return x(i) + (x(1) - x(0)) / 2; })
+        .attr("y", function (d) { return y(d.count) - 10 })
         .attr('text-anchor', 'middle')
         .attr('fill', 'black')
 }
 
-function getPrices(data){
+function getPrices(data) {
     return data.map(i => i.avg_price).filter(i => i <= 750);
 }
 
-function getBins(prices){
-    const bins = Array.from({length: Math.ceil(d3.max(prices) / binSize)}, (_, i) => ({
+function getBins(prices) {
+    const bins = Array.from({ length: Math.ceil(d3.max(prices) / binSize) }, (_, i) => ({
         start: i * binSize,
         end: (i + 1) * binSize,
         count: 0,

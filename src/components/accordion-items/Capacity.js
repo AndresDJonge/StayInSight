@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react'
 import { Slider } from "@mui/material";
 import { Card } from "react-bootstrap";
 import { CustomToggle } from "../CustomToggle";
-import CapacityChart from "../CapacityChart";
 import { getAveragePriceByListingIds } from "../../azure";
+import people, { updateChart } from "../../d3/capacity"
+import "../../style/d3.css"
 
-export default function ({ eventKey, data, filters, setFilters }) {
+export default function ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }) {
     // TODO: lees de personrange dynamisch in voor de state
     const min = 1;
     const max = 8;
@@ -15,44 +16,10 @@ export default function ({ eventKey, data, filters, setFilters }) {
     const [priceBins, setPriceBins] = useState(null);
 
     useEffect(() => {
-        getGroupedData(data)
+        getGroupedData(staticData, setPriceBins)
     }, [])
 
-    function valuetext(value) {
-        if (value === 8)
-            return '8+ persons'
-        if (value === 1)
-            return `${value} person`
-        return `${value} persons`
-    }
-
-    function groupByAccomodates(data) {
-        return data.reduce((groups, item) => {
-            const group = (groups[item.accommodates] || [])
-            group.push(item)
-            groups[item.accommodates] = group
-            return groups;
-        }, {});
-    }
-
-    function getPriceByCapacity(capacity) {
-        const candidates = data.filter(item => Number(item.accommodates) === Number(capacity)).map(i => i.id)
-        return getAveragePriceByListingIds(candidates);
-    }
-
-    function getGroupedData(data) {
-        const accommodationsGroup = groupByAccomodates(data)
-        const promises = Object.keys(accommodationsGroup).map(async k => {
-            const result = await getPriceByCapacity(k)
-            return {
-                persons: k,
-                value: result[0].$1,
-            };
-        });
-        Promise.all(promises).then(data => setPriceBins(data));
-    }
-
-    const handleChange = (event, newValue, activeThumb) => {
+    const handleChange = (_, newValue, activeThumb) => {
         if (!Array.isArray(newValue)) {
             return;
         }
@@ -83,6 +50,19 @@ export default function ({ eventKey, data, filters, setFilters }) {
         setFilters([...filters])
     };
 
+    // Whenever the data changes -> re-render the chart
+    useEffect(() => {
+        if (priceBins !== null) {
+            people(priceBins, value)
+        }
+    }, [priceBins])
+
+    // Whenever the range in the slider changes -> update the opacity
+    useEffect(() => {
+        console.log("Updating!")
+        if (priceBins !== null) updateChart(priceBins, value)
+    }, [...value])
+
     return <Card>
         <Card.Header className='py-0 text-center'>
             <Slider
@@ -102,8 +82,42 @@ export default function ({ eventKey, data, filters, setFilters }) {
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>
-                <CapacityChart data={priceBins} selectedRange={value} />
+                <div id={"capacity"} />
             </Card.Body>
         </Accordion.Collapse>
     </Card>
+}
+
+function groupByAccomodates(data) {
+    return data.reduce((groups, item) => {
+        const group = (groups[item.accommodates] || [])
+        group.push(item)
+        groups[item.accommodates] = group
+        return groups;
+    }, {});
+}
+
+function valuetext(value) {
+    if (value === 8)
+        return '8+ persons'
+    if (value === 1)
+        return `${value} person`
+    return `${value} persons`
+}
+
+function getPriceByCapacity(data, capacity) {
+    const candidates = data.filter(item => Number(item.accommodates) === Number(capacity)).map(i => i.id)
+    return getAveragePriceByListingIds(candidates);
+}
+
+function getGroupedData(data, setPriceBins) {
+    const accommodationsGroup = groupByAccomodates(data)
+    const promises = Object.keys(accommodationsGroup).map(async k => {
+        const result = await getPriceByCapacity(data, k)
+        return {
+            persons: k,
+            value: result[0].$1,
+        };
+    });
+    Promise.all(promises).then(data => setPriceBins(data));
 }

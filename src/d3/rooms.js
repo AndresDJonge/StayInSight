@@ -1,15 +1,14 @@
 import * as d3 from "d3"
 
-export default (data, selectedRange) => {
-    // width of the card itsef (card body is collapsed and has width 0)
-    document.getElementById("people-prices").innerHTML = ""
-    const realWidth = document.getElementById("people-prices").parentElement.parentElement.parentElement.offsetWidth
+export default (data, selectedRoomsCount) => {
+    document.getElementById("rooms").innerHTML = ""
+    const realWidth = document.getElementById("rooms").parentElement.parentElement.parentElement.offsetWidth
 
-    let margin = { top: 30, right: 40, bottom: 70, left: 50 },
+    let margin = { top: 30, right: 40, bottom: 70, left: 80 },
         width = realWidth - margin.left - margin.right,
         height = ((4 / 6) * realWidth) - margin.top - margin.bottom;
 
-    const svg = d3.select("#people-prices")
+    const svg = d3.select("#rooms")
         .append('svg')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -19,8 +18,10 @@ export default (data, selectedRange) => {
     /* X-scale */
     let x = d3.scaleBand()
         .range([0, width])
-        .domain(data.map(i => i.persons))
+        .domain(data.map(d => +d["rooms"]))
         .padding(0.2);
+
+    console.log("domaon:", x.domain())
 
     /* X-axis */
     svg.append('g')
@@ -32,10 +33,10 @@ export default (data, selectedRange) => {
         .attr('text-anchor', 'middle')
         .attr('x', width / 2)
         .attr('y', height + margin.top + 20)
-        .text('Maximum Occupancy Limit BnB')
+        .text('Bedrooms')
 
     /* Y-scale */
-    const max = d3.max(data.map(i => i.value))
+    const max = d3.max(data, d => d["value"])
     let y = d3.scaleLinear()
         .domain([0, max])
         .range([height, 0]);
@@ -49,54 +50,40 @@ export default (data, selectedRange) => {
         .attr('transform', 'rotate(-90)')
         .attr("x", -height / 2)
         .attr("y", -margin.right - 5)
-        .text('Price')
+        .text("Amount of AirBnB's")
 
-    const bars = svg.selectAll("bar")
+    svg.selectAll("bar")
         .data(data)
         .enter()
         .append("rect")
-        .attr("x", function (d) {
-            return x(d.persons);
-        })
-        .attr("y", function (d) {
-            return y(d.value);
-        })
+        .attr("x", d => x(d["rooms"]))
+        .attr("y", d => y("" + d["value"]))
         .attr("width", x.bandwidth())
-        .attr("height", function (d) {
-            return height - y(d.value);
-        })
+        .attr("height", d => height - y(d["value"]))
         .attr("fill", "#69b3a2")
         .attr("fill-opacity", d => {
-            if (selectedRange[1] === 8 && d.persons >= 8) return 1
-            return !inRange(d.persons, selectedRange) ? 0.2 : 1
+            if (selectedRoomsCount > 4 && selectedRoomsCount <= +d["rooms"]) {
+                console.log("CORRECTTTTT:", d)
+                return 1
+            }
+            else if (+d["rooms"] === selectedRoomsCount) return 1
+
+            return 0.2
         });
 
     svg.selectAll("bar-label")
         .data(data)
         .enter()
         .append("text")
-        .text(d => Number(d.value).toFixed(0))
-        .attr("x", function (d) {
-            return x(d.persons) + (x.bandwidth() / 2);
-        })
-        .attr("y", function (d) {
-            return y(d.value) - 10
-        })
+        .text((d, i) => d["avg_price"] ? "$" + Number(d["avg_price"]).toFixed(0) : "")
+        .attr("x", (d, i) => x(d['rooms']) + (x.bandwidth() / 2))
+        .attr("y", d => y("" + d["value"]) - 10)
         .attr('text-anchor', 'middle')
         .attr('fill', 'black')
 }
 
-function inRange(x, range) {
-    return range[0] <= x && x <= range[1];
-}
-
-export function updateChart(data, selectedRange) {
-    const svg = d3.select("#people-prices");
-
+export function updateChart(data, selectedRoomsCount) {
+    const svg = d3.select("#rooms-chart");
     const bars = svg.selectAll('rect').data(data)
-
-    bars.attr("fill-opacity", d => {
-        if (selectedRange[1] === 8 && d.persons >= 8) return 1
-        return !inRange(d.persons, selectedRange) ? 0.2 : 1
-    });
+    bars.attr("fill-opacity", d => d === selectedRoomsCount ? 1 : 0.2);
 }

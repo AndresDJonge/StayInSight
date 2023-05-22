@@ -5,16 +5,15 @@ import * as d3 from "d3"
 
 export default (data) => {
     // width of the card itsef (card body is collapsed and has width 0)
-    document.getElementById("season-chart").innerHTML = ""
-    const realWidth = document.getElementById("season-chart").parentElement.parentElement.parentElement.offsetWidth
+    document.getElementById("season").innerHTML = ""
+    const realWidth = document.getElementById("season").parentElement.parentElement.parentElement.offsetWidth
 
-    // set the dimensions and margins of the graph
-    var margin = { top: 10, right: 40, bottom: 30, left: 60 },
+    let margin = { top: 30, right: 40, bottom: 70, left: 80 },
         width = realWidth - margin.left - margin.right,
-        height = ((40 / 46) * realWidth) - margin.top - margin.bottom;
+        height = ((4 / 6) * realWidth) - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
-    var svg = d3.select("#season-chart")
+    var svg = d3.select("#season")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)

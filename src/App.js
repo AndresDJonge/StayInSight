@@ -4,30 +4,37 @@ import borders from "./data/borders/amsterdam";
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import Map from "./components/Map";
-import Chart from "./components/DemoBarChart";
 import "./style/App.css"
 import Accordion from "./components/Accordion";
 import Summary from "./components/Summary";
-import { findByListingId, getAveragePriceByListingIds, getAveragePrices } from "./azure";
 
 
 export default () => {
     // We need to make a separation between the actual data and what the map shows
     // because otherwise the filtered data is gone forever!
     // So always pass 'data' as the actual data, but the setFilteredData as a filter to the components!!!
-    const data = _data;
-    const [filteredData, setFilteredData] = useState(_data)
+    const [staticData, setStaticDataInternal] = useState(_data)
+    const [filteredData, setFilteredDataInternal] = useState(_data)
 
     const [city, setCity] = useState(cities.find(x => x.key === 'los angeles'))
 
-    const removeWaypoint = (id) => {
-        console.log("App, removing ", id)
-        setFilteredData(data.filter(wp => wp.id !== id))
+    const setFilteredData = v => {
+        console.log("Filtered data:", v)
+        setFilteredDataInternal(v)
     }
 
-    // useEffect(() => {
-    //     document.getElementsByClassName("mapboxgl-control-container")[0].innerHTML = ""
-    // }, [])
+    const setStaticData = v => {
+        setStaticDataInternal(v)
+
+        const copy = [...filteredData]
+        copy.map(e => v.find(static_e => static_e["id"] === e["id"]))
+        setFilteredData(copy)
+    }
+
+    const removeWaypoint = (id) => {
+        console.log("App, removing ", id)
+        setFilteredData(staticData.filter(wp => wp.id !== id))
+    }
 
 
     return (
@@ -37,8 +44,8 @@ export default () => {
                     <Map {...{ borders, city, removeWaypoint, filteredData, setFilteredData }} />
                 </Col>
                 <Col xs={4}>
-                    <Summary data={filteredData} />
-                    <Accordion data={data} setData={setFilteredData} />
+                    <Summary {...{ filteredData }} />
+                    <Accordion {...{ staticData, setStaticData, filteredData, setFilteredData }} />
                 </Col>
             </Row>
         </Container>

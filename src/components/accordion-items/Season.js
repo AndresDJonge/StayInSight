@@ -7,17 +7,18 @@ import { faSnowflake, faSun } from '@fortawesome/free-regular-svg-icons';
 import { faLeaf } from '@fortawesome/free-solid-svg-icons';
 import { faCanadianMapleLeaf } from '@fortawesome/free-brands-svg-icons';
 import { CustomToggle } from "../CustomToggle";
-import _drawChart from "../../d3/seasonprice";
+import _drawChart from "../../d3/season";
 import { getAveragePrices, getAveragePricePerDay } from "../../azure";
 
-export default ({ eventKey, data, setData }) => {
+export default ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }) => {
     const drawChart = async _ => {
-        const pricePerDay = await getAveragePricePerDay(data.map(c => c["id"]))
+        const pricePerDay = await getAveragePricePerDay(staticData.map(c => c["id"]))
         //console.log("input season chart: ", pricePerDay)
         _drawChart(pricePerDay)
     }
 
     const updateAvgPrices = async newVal => {
+        console.log("data before SETTING AVG PRICES PER AIRBNB")
         var range = []
 
         if (newVal === 0) range = [["2023-01-01", "2023-03-19"], ["2023-12-22", "2023-12-31"]]
@@ -27,13 +28,14 @@ export default ({ eventKey, data, setData }) => {
 
 
         const results = await getAveragePrices(
-            data.map(v => v.id),
+            staticData.map(v => v.id),
             range
         )
 
-        //console.log("before setting season:", results)
+        console.log("results before setting season:", results)
+        console.log("data before setting season:", staticData)
 
-        const copy = Object.entries(data).map(([k, v]) => {
+        const copy = Object.entries(staticData).map(([k, v]) => {
             var match = results.find(e => e["listing_id"] === v["id"])
 
             var listing_copy = { ...v }
@@ -44,14 +46,15 @@ export default ({ eventKey, data, setData }) => {
         })
 
 
-        setData([...copy])
+        setStaticData([...copy])
     }
 
-    useEffect(() => drawChart(0), [])
+    useEffect(() => { drawChart(); updateAvgPrices(0) }, [])
 
     return (
         <Card>
             <Card.Header>
+                <div className='lead text-center'>Season</div>
                 <Row style={{ "width": "100%", marginLeft: "10px", paddingRight: "10px" }}>
                     <Col className='p-0' xs={12}>
                         <Row>
@@ -93,7 +96,7 @@ export default ({ eventKey, data, setData }) => {
             </Card.Header>
             <Accordion.Collapse eventKey={eventKey}>
                 <Card.Body>
-                    <div id="season-chart"></div>
+                    <div id="season" />
                 </Card.Body>
             </Accordion.Collapse>
         </Card>

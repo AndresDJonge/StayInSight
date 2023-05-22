@@ -3,9 +3,8 @@ import { useState } from 'react';
 import { ButtonGroup, Card, ToggleButton } from "react-bootstrap";
 import { Slider } from "@mui/material";
 import { CustomToggle } from "../CustomToggle";
-import PersonBarChart from "../CapacityChart";
 
-export default function ({ eventKey }) {
+export default function ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }) {
     const [radioValue, setRadioValue] = useState(1);
     const radios = [
         { name: 'Weekday', value: 1 },

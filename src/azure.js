@@ -51,7 +51,7 @@ export const getAveragePrices = async (ids, dateRange = null) => {
                 group by c.listing_id`
     }
 
-    console.log("appel:", querySpec)
+    //console.log("appel:", querySpec)
 
     const { resources } = await container.items.query(querySpec).fetchAll();
     //console.log("Fetched entries: ", resources)
