@@ -31,7 +31,6 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData, 
 
 
     function place_marker(marker) {
-
         if (map.current && marker && marker.latitude && marker.longitude) {
 
             // remove old marker first

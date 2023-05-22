@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 export default function ({ staticData, setStaticData, filteredData, setFilteredData, marker, setMarker }) {
     const [key, setKey] = useState(null);
     const [filters, setFilters] = useState([])
-    const [loading, setLoading] = useState(false)
 
     // This filters the data based on all the filters of the accordion
     // To add a filter, you need an object { id: eventkey, func: filter predicate }
