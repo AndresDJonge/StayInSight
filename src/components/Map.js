@@ -62,7 +62,7 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData, 
                 paint: {
                     'circle-radius': 6,
                     // TODO change color or icon
-                    'circle-color': 'blue'
+                    'circle-color': colorMappings["color-secondary-1-4"]
                 }
             });
         }
@@ -120,7 +120,7 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
         'source': city.key,
         'paint': {
             'circle-radius': 6,
-            'circle-color': '#B42222'
+            'circle-color': colorMappings["color-primary-0"]
         },
         'filter': ['==', '$type', 'Point']
     });
@@ -170,3 +170,26 @@ const parseWaypoints = (values, borders) => Object({
         ]
     }
 })
+
+var colorMappings = {
+    "color-primary-0": "#42A4F5",
+    "color-primary-1": "#98CDF9",
+    "color-primary-2": "#69B7F7",
+    "color-primary-3": "#1A8FF0",
+    "color-primary-4": "#0780E4",
+    "color-secondary-1-0": "#5552F7",
+    "color-secondary-1-1": "#A3A1FA",
+    "color-secondary-1-2": "#7976F8",
+    "color-secondary-1-3": "#302CF2",
+    "color-secondary-1-4": "#140FE8",
+    "color-secondary-2-0": "#FFCE37",
+    "color-secondary-2-1": "#FFE594",
+    "color-secondary-2-2": "#FFD962",
+    "color-secondary-2-3": "#FFC30B",
+    "color-secondary-2-4": "#FFC000",
+    "color-complement-0": "#FFAB37",
+    "color-complement-1": "#FFD294",
+    "color-complement-2": "#FFBD62",
+    "color-complement-3": "#FF980B",
+    "color-complement-4": "#FF9400"
+  };
