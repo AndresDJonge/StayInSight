@@ -91,7 +91,7 @@ function inRange(x, range) {
 }
 
 export function updateChart(data, selectedRange) {
-    const svg = d3.select("#people-prices");
+    const svg = d3.select("#capacity");
 
     const bars = svg.selectAll('rect').data(data)
 

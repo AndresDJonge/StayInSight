@@ -1,23 +1,24 @@
 import Accordion from "react-bootstrap/Accordion";
-import { Slider } from "@mui/material";
-import { useEffect, useState } from 'react'
-import { Card } from "react-bootstrap";
-import { CustomToggle } from "../CustomToggle";
+import {Slider} from "@mui/material";
+import {useEffect, useState} from 'react'
+import {Card} from "react-bootstrap";
+import {CustomToggle} from "../CustomToggle";
 import RadiusBarChart from "../RadiusBarChart";
-import { groupSort } from "d3";
-import { getAveragePriceByListingIds } from "../../azure";
+import {getAveragePriceByListingIds} from "../../azure";
 
 export default function ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData, marker, setMarker }) {
     const [value, setValue] = useState(40);
     const [priceBins, setPriceBins] = useState(null);
     const minDistance = 0;
     const maxDistance = 40;
-    const centerLatitude = 34.052235;
-    const centerLongitude = -118.243683;
 
     useEffect(() => {
         getGroupedData(filteredData)
     }, [])
+
+    useEffect(() => {
+        updateFilter(value)
+    }, [marker])
 
     const marks = [
         { value: 1, label: '1km' },
@@ -29,10 +30,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
         { value: 40, label: '40+km' },
     ];
 
-    const handleChange = (event, newValue, activeThumb) => {
-
-        setValue(newValue)
-
+    function updateFilter(newValue){
         filters = filters.filter(f => f.id !== eventKey)
         filters.push({
             id: eventKey,
@@ -40,6 +38,11 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
         })
 
         setFilters([...filters])
+    }
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue)
+        updateFilter(newValue)
     }
 
     function groupByDistance(data) {
@@ -57,7 +60,6 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
     function getPriceByCapacity(capacity) {
         const candidates = filteredData.filter(item =>
             Number(getDistanceIndex(calculateDistance(item.latitude, item.longitude, marker))) === Number(capacity)).map(i => i.id);
-        //console.log("Candidat" + candidates)
         return getAveragePriceByListingIds(candidates);
     }
 
@@ -67,7 +69,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
             const result = await getPriceByCapacity(k)
             return {
                 distance: k,
-                value: result[0].$1
+                value: result[0]['$1']
             };
         });
         Promise.all(promises).then(data => setPriceBins(data))
@@ -102,19 +104,18 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
 }
 
 function calculateDistance(lat1, lon1, marker) {
-    var lat2 = marker.latitude
-    var lon2 = marker.longitude
+    let lat2 = marker.latitude
+    let lon2 = marker.longitude
 
-    var R = 6371
-    var dLat = toRad(lat2 - lat1);
-    var dLon = toRad(lon2 - lon1);
-    var lat1 = toRad(lat1);
+    let R = 6371
+    let dLat = toRad(lat2 - lat1);
+    let dLon = toRad(lon2 - lon1);
+    lat1 = toRad(lat1);
     lat2 = toRad(lat2);
 
-    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = R * c;
-    return d;
+    let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
 }
 
 function toRad(val) {

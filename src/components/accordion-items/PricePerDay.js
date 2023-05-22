@@ -55,7 +55,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
 
     return (
         <Card>
-            <Card.Header className='py-0 text-center'>
+            <Card.Header className='text-center'>
                 <div className='lead'>Average price per day</div>
                 <Slider
                     style={{ color: '#4E5154', width: '90%' }}

@@ -2,7 +2,6 @@ import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from "react";
 
 export default ({ borders, city, removeWaypoint, filteredData, setFilteredData, marker, setMarker }) => {
-    //console.log("passed city: ", city)
     mapboxgl.accessToken = "pk.eyJ1IjoiYW5kcmVzZGVqb25nZSIsImEiOiJjbGh5am1oNWcxNGtvM2lxYTQzMnBidWpvIn0.pPJCqvrKLJKeyQaWfZ7qvQ";
     const mapContainer = useRef(null);
     const map = useRef(null);
@@ -88,12 +87,9 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData, 
         if (marker.latitude && marker.longitude) {
             map.current.flyTo({
                 center: [marker.longitude, marker.latitude],
-                duration: 1500,
-                // TODO zoom afhankelijk van ingestelde radius?
-                zoom: zoom + 2
+                duration: 1500
             });
         }
-        ;
         // place marker at coordinates
         place_marker(marker);
     }, [marker]);
