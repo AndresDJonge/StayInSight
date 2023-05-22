@@ -25,9 +25,9 @@ export default () => {
         setFilteredData(data.filter(wp => wp.id !== id))
     }
 
-    useEffect(() => {
-        document.getElementsByClassName("mapboxgl-control-container")[0].innerHTML = ""
-    }, [])
+    // useEffect(() => {
+    //     document.getElementsByClassName("mapboxgl-control-container")[0].innerHTML = ""
+    // }, [])
 
 
     return (

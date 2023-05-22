@@ -21,9 +21,9 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData }
 
             // this fixes a bug where fetching the tileset (when deployed) returns a HTTP 403
             // https://github.com/mapbox/mapbox-gl-js/issues/12568
-            transformRequest: (url, _) => {
-                return { url, headers: { "Referrer-Policy": "origin-when-cross-origin" } }
-            }
+            // transformRequest: (url, _) => {
+            //     return { url, headers: { "Referrer-Policy": "origin-when-cross-origin" } }
+            // }
         })
     }
 
