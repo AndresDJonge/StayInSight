@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react"
-import radius, {updateChart} from "../d3/radius"
+import { useEffect, useState } from "react"
+import radius, { updateChart, exists } from "../d3/radius"
 import "../style/d3.css"
 
-export default ({data, selectedRange}) => {
+export default ({ data, selectedRange }) => {
     const id = 'radius-prices'
 
     // Whenever the data changes -> re-render the chart
@@ -15,5 +15,5 @@ export default ({data, selectedRange}) => {
         if (data !== null) updateChart(data, selectedRange)
     }, [selectedRange])
 
-    return <div id={id}/>
+    return <div id={id} />
 }
