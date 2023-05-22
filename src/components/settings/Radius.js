@@ -18,7 +18,7 @@ export default function({eventKey, data, filters, setFilters}) {
     useEffect(() => 
     {
         getGroupedData(data)
-    }, [value])
+    }, [])
 
 
     const marks = [
@@ -67,20 +67,28 @@ export default function({eventKey, data, filters, setFilters}) {
         return `${value}km`
     }
 
+    function getDistanceIndex(dist) {
+        dist = Math.floor(dist / 5) * 5
+        dist = dist >= 40 ? 40 : dist
+        return dist
+        // return  dist >= 40 ? 40 : Math.floor(dist)
+    }
+
     function groupByDistance(data) {
         return data.reduce((groups, item) => {
-            var dist = calculateDistance(item.latitude, item.longitude)
+            const dist = calculateDistance(item.latitude, item.longitude)
             console.log("Distance: " + dist)
-            const group = (groups[dist] || [])
+            const groupIndex = getDistanceIndex(dist)
+            const group = (groups[groupIndex] || [])
             group.push(item)
-            groups[dist] = group
+            groups[groupIndex] = group
             return groups;
         }, {});
     }
 
     function getPriceByCapacity(capacity) {
         const candidates = data.filter(item =>
-            Number(calculateDistance(item.latitude, item.longitude)) === Number(capacity)).map(i => i.id);
+            Number(getDistanceIndex(calculateDistance(item.latitude, item.longitude))) === Number(capacity)).map(i => i.id);
         console.log("Candidat" + candidates)
         return getAveragePriceByListingIds(candidates);
     }
