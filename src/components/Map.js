@@ -9,7 +9,11 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData }
     const [lng, setLng] = useState(city.lng);
     const [lat, setLat] = useState(city.lat);
     const [zoom, setZoom] = useState(city.zoom);
-    const [loaded, setLoaded] = useState(false)
+    const [loaded, setLoaded] = useState(false);
+    const [marker, setMarker] = useState({
+        latitude: null,
+        longitude: null
+    });
 
     const ensureInitialized = (_map) => {
         if (_map.current) return
@@ -27,17 +31,83 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData }
         })
     }
 
+    // add marker on click
+    const handleMapClick = (event) => {
+        const {lngLat} = event;
+        const longitude = lngLat.lng;
+        const latitude = lngLat.lat;
+        setMarker({latitude, longitude});
+    };
+
+
+    function place_marker(marker) {
+
+        if (map.current && marker && marker.latitude && marker.longitude) {
+
+            // remove old marker first
+            if (map.current.getSource('marker-source')) {
+                map.current.removeLayer('marker');
+                map.current.removeSource('marker-source');
+            }
+
+            /* MARKER */
+            map.current.addSource('marker-source', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: [
+                        {
+                            type: 'Feature',
+                            geometry: {
+                                type: 'Point',
+                                coordinates: [marker.longitude, marker.latitude]
+                            }
+                        }
+                    ]
+                }
+            });
+
+            map.current.addLayer({
+                id: 'marker',
+                type: 'circle',
+                source: 'marker-source',
+                paint: {
+                    'circle-radius': 6,
+                    // TODO change color or icon
+                    'circle-color': 'blue'
+                }
+            });
+        }
+    };
+
     // load map source once when rendering for the first time
     useEffect(() => {
         ensureInitialized(map);
-        map.current.on("load", () => initializeSources(map, city, parseWaypoints(filteredData, borders), setLoaded))
+        map.current.on("load", () => initializeSources(map, city, parseWaypoints(filteredData, borders), setLoaded));
+        map.current.on('click', handleMapClick); // handleMapClick for marker
     }, []);
 
     // reload map source when 'data' hook changes
     useEffect(() => {
         ensureInitialized(map);
         loaded && map.current.getSource(city.key).setData(parseWaypoints(filteredData, borders).data)
-    }, [filteredData, loaded])
+    }, [filteredData, loaded]);
+
+    // flyTo marker's new position and place marker when marker changes
+    useEffect(() => {
+        // fly to coordinates
+        if (marker.latitude && marker.longitude) {
+            map.current.flyTo({
+                center: [marker.longitude, marker.latitude],
+                duration: 1500,
+                // TODO zoom afhankelijk van ingestelde radius?
+                zoom: zoom + 2
+            });
+        }
+        ;
+        // place marker at coordinates
+        place_marker(marker);
+    }, [marker]);
 
     return <div ref={mapContainer} className="map-container" />;
 }
