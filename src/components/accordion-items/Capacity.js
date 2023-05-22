@@ -8,12 +8,26 @@ import people, { updateChart } from "../../d3/capacity"
 import "../../style/d3.css"
 
 export default function ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }) {
-    // TODO: lees de personrange dynamisch in voor de state
     const min = 1;
     const max = 8;
     const [value, setValue] = useState([min + 1, max - 1]);
     const minDistance = 0;
     const [priceBins, setPriceBins] = useState(null);
+
+    // First, remove every filter that has been previously set by this component
+    // Second, add new filters to the global filters object
+    // Whenever the data changes -> re-render the chart
+    useEffect(() => {
+        if (priceBins !== null) {
+            people(priceBins, value)
+        }
+    }, [priceBins])
+
+    // Whenever the range in the slider changes -> update the opacity
+    useEffect(() => {
+        if (priceBins !== null)
+            updateChart(priceBins, value)
+    }, [...value])
 
     useEffect(() => {
         getGroupedData(staticData, setPriceBins)
@@ -30,38 +44,24 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
             setValue([value[0], Math.max(newValue[1], value[0] + minDistance)]);
         }
 
-        // First, remove every filter that has been previously set by this component
         filters = filters.filter(f => f.id !== `${eventKey}_1`)
         filters = filters.filter(f => f.id !== `${eventKey}_2`)
 
-        // Second, add new filters to the global filters object
         filters.push({
-            id: `${eventKey}_1`,
-            func: bnb => bnb.accommodates >= newValue[0]
-        })
+        id: `${eventKey}_1`,
+        func: bnb => bnb.accommodates >= newValue[0]
+    })
         filters.push({
-            id: `${eventKey}_2`,
-            func: bnb => {
+        id: `${eventKey}_2`,
+        func: bnb => {
                 return newValue[1] < 8 ? bnb.accommodates <= newValue[1] : bnb;
             }
-        })
-
         // Finally, set the filters for the accordion
+    })
+
         setFilters([...filters])
     };
 
-    // Whenever the data changes -> re-render the chart
-    useEffect(() => {
-        if (priceBins !== null) {
-            people(priceBins, value)
-        }
-    }, [priceBins])
-
-    // Whenever the range in the slider changes -> update the opacity
-    useEffect(() => {
-        console.log("Updating!")
-        if (priceBins !== null) updateChart(priceBins, value)
-    }, [...value])
 
     return <Card>
         <Card.Header className='py-0 text-center'>

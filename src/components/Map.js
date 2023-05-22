@@ -2,7 +2,6 @@ import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from "react";
 
 export default ({ borders, city, removeWaypoint, filteredData, setFilteredData, marker, setMarker }) => {
-    //console.log("passed city: ", city)
     mapboxgl.accessToken = "pk.eyJ1IjoiYW5kcmVzZGVqb25nZSIsImEiOiJjbGh5am1oNWcxNGtvM2lxYTQzMnBidWpvIn0.pPJCqvrKLJKeyQaWfZ7qvQ";
     const mapContainer = useRef(null);
     const map = useRef(null);

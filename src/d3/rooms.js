@@ -21,7 +21,7 @@ export default (data, selectedRoomsCount) => {
         .domain(data.map(d => +d["rooms"]))
         .padding(0.2);
 
-    console.log("domaon:", x.domain())
+    // console.log("domaon:", x.domain())
 
     /* X-axis */
     svg.append('g')
@@ -63,7 +63,7 @@ export default (data, selectedRoomsCount) => {
         .attr("fill", "#69b3a2")
         .attr("fill-opacity", d => {
             if (selectedRoomsCount > 4 && selectedRoomsCount <= +d["rooms"]) {
-                console.log("CORRECTTTTT:", d)
+                // console.log("CORRECTTTTT:", d)
                 return 1
             }
             else if (+d["rooms"] === selectedRoomsCount) return 1

@@ -22,7 +22,6 @@ export default () => {
     });
 
     const setFilteredData = v => {
-        console.log("Filtered data:", v)
         setFilteredDataInternal(v)
     }
 
@@ -35,7 +34,6 @@ export default () => {
     }
 
     const removeWaypoint = (id) => {
-        console.log("App, removing ", id)
         setFilteredData(staticData.filter(wp => wp.id !== id))
     }
 

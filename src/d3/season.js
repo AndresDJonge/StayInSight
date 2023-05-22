@@ -32,7 +32,7 @@ export default (data) => {
         g.call(d3.axisBottom(x).tickValues(parsedData.filter((d, i) => i % 61 === 0 || i === 0).map(d => d["date"])).tickFormat(d3.timeFormat("%B")));
     };
 
-    console.log("eeeeeeeeeee: ", parsedData)
+    // console.log("eeeeeeeeeee: ", parsedData)
     // Add X axis --> it is a date format
     var x = d3.scaleTime()
         .domain(d3.extent(parsedData, d => d["date"]))
@@ -60,6 +60,6 @@ export default (data) => {
             .y(d => y(d["avg_price"]))
         )
 
-    console.log("realdatazz:", parsedData)
+    // console.log("realdatazz:", parsedData)
 
 }

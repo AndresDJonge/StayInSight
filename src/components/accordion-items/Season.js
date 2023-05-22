@@ -18,7 +18,7 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
     }
 
     const updateAvgPrices = async newVal => {
-        console.log("data before SETTING AVG PRICES PER AIRBNB")
+        // console.log("data before SETTING AVG PRICES PER AIRBNB")
         var range = []
 
         if (newVal === 0) range = [["2023-01-01", "2023-03-19"], ["2023-12-22", "2023-12-31"]]
@@ -32,8 +32,8 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
             range
         )
 
-        console.log("results before setting season:", results)
-        console.log("data before setting season:", staticData)
+        // console.log("results before setting season:", results)
+        // console.log("data before setting season:", staticData)
 
         const copy = Object.entries(staticData).map(([k, v]) => {
             var match = results.find(e => e["listing_id"] === v["id"])
