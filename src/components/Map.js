@@ -1,7 +1,7 @@
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from "react";
 
-export default ({ borders, city, removeWaypoint, filteredData, setFilteredData }) => {
+export default ({ borders, city, removeWaypoint, filteredData, setFilteredData, marker, setMarker }) => {
     //console.log("passed city: ", city)
     mapboxgl.accessToken = "pk.eyJ1IjoiYW5kcmVzZGVqb25nZSIsImEiOiJjbGh5am1oNWcxNGtvM2lxYTQzMnBidWpvIn0.pPJCqvrKLJKeyQaWfZ7qvQ";
     const mapContainer = useRef(null);
@@ -10,10 +10,6 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData }
     const [lat, setLat] = useState(city.lat);
     const [zoom, setZoom] = useState(city.zoom);
     const [loaded, setLoaded] = useState(false);
-    const [marker, setMarker] = useState({
-        latitude: null,
-        longitude: null
-    });
 
     const ensureInitialized = (_map) => {
         if (_map.current) return
@@ -22,21 +18,15 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData }
             style: 'mapbox://styles/andresdejonge/clhyjvtnq009201qu1lhi0p3y',
             center: [lng, lat],
             zoom: zoom,
-
-            // this fixes a bug where fetching the tileset (when deployed) returns a HTTP 403
-            // https://github.com/mapbox/mapbox-gl-js/issues/12568
-            // transformRequest: (url, _) => {
-            //     return { url, headers: { "Referrer-Policy": "origin-when-cross-origin" } }
-            // }
         })
     }
 
     // add marker on click
     const handleMapClick = (event) => {
-        const {lngLat} = event;
+        const { lngLat } = event;
         const longitude = lngLat.lng;
         const latitude = lngLat.lat;
-        setMarker({latitude, longitude});
+        setMarker({ latitude, longitude });
     };
 
 

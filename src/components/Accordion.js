@@ -7,7 +7,7 @@ import Capacity from "./accordion-items/Capacity";
 import DayPrice from "./accordion-items/PricePerDay";
 import { useEffect, useState } from "react";
 
-export default function ({ staticData, setStaticData, filteredData, setFilteredData }) {
+export default function ({ staticData, setStaticData, filteredData, setFilteredData, marker, setMarker }) {
     const [key, setKey] = useState(null);
     const [filters, setFilters] = useState([])
     const [loading, setLoading] = useState(false)
@@ -28,7 +28,7 @@ export default function ({ staticData, setStaticData, filteredData, setFilteredD
             <Season eventKey={'0'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
             <Rooms eventKey={'1'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
             <TypeDay eventKey={'2'} />
-            <Radius eventKey={'3'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
+            <Radius eventKey={'3'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData, marker, setMarker }} />
             <Capacity eventKey={'4'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
             <DayPrice eventKey={'5'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
         </Accordion>

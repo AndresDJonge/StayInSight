@@ -15,8 +15,11 @@ export default () => {
     // So always pass 'data' as the actual data, but the setFilteredData as a filter to the components!!!
     const [staticData, setStaticDataInternal] = useState(_data)
     const [filteredData, setFilteredDataInternal] = useState(_data)
-
     const [city, setCity] = useState(cities.find(x => x.key === 'los angeles'))
+    const [marker, setMarker] = useState({
+        latitude: null,
+        longitude: null
+    });
 
     const setFilteredData = v => {
         console.log("Filtered data:", v)
@@ -41,11 +44,11 @@ export default () => {
         <Container fluid>
             <Row>
                 <Col xs={8} className="p-0">
-                    <Map {...{ borders, city, removeWaypoint, filteredData, setFilteredData }} />
+                    <Map {...{ borders, city, removeWaypoint, filteredData, setFilteredData, marker, setMarker }} />
                 </Col>
                 <Col xs={4}>
                     <Summary {...{ filteredData }} />
-                    <Accordion {...{ staticData, setStaticData, filteredData, setFilteredData }} />
+                    <Accordion {...{ staticData, setStaticData, filteredData, setFilteredData, marker, setMarker }} />
                 </Col>
             </Row>
         </Container>
