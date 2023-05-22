@@ -88,12 +88,9 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData, 
         if (marker.latitude && marker.longitude) {
             map.current.flyTo({
                 center: [marker.longitude, marker.latitude],
-                duration: 1500,
-                // TODO zoom afhankelijk van ingestelde radius?
-                zoom: zoom + 2
+                duration: 1500
             });
         }
-        ;
         // place marker at coordinates
         place_marker(marker);
     }, [marker]);
