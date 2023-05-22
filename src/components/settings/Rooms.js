@@ -15,19 +15,28 @@ export default function ({ eventKey, data, filters, setFilters }) {
         { name: '4+', value: 5 },
     ];
 
-    useEffect(() => {
+    const updateSelection = n => {
         filters = filters.filter(f => f.id !== `${eventKey}`)
 
         filters.push({
             id: `${eventKey}`,
-            func: bnb => {
-                return radioValue === 5 ? bnb.bedrooms > 4 : bnb.bedrooms === radioValue
-            }
+            func: bnb => radioValue === 5 ? bnb.bedrooms > 4 : bnb.bedrooms === n
         })
+        setRadioValue(n)
 
         setFilters([...filters])
-        // drawChart([...])
-    }, [radioValue])
+    }
+
+    useEffect(() => {
+        console.log("data on rooms render: ", data)
+        if (data !== null) {
+            console.log("persons data:", data)
+
+            const amounts = amountOfRoomSizes(data)
+            console.log("grouped data:", amounts)
+            drawChart(amounts, radioValue)
+        }
+    }, [data])
 
     return <Card>
         <Card.Header className='py-0 text-center'>
@@ -43,7 +52,7 @@ export default function ({ eventKey, data, filters, setFilters }) {
                         name="radio"
                         value={radio.value}
                         checked={radioValue === radio.value}
-                        onChange={(e) => setRadioValue(Number(e.currentTarget.value))}>
+                        onChange={(e) => updateSelection(Number(e.currentTarget.value))}>
                         {radio.name}
                     </ToggleButton>
                 ))}
@@ -56,4 +65,10 @@ export default function ({ eventKey, data, filters, setFilters }) {
             </Card.Body>
         </Accordion.Collapse>
     </Card>
+}
+
+const amountOfRoomSizes = data => {
+    var counts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    data.forEach(e => Number(e["bedrooms"]) <= 8 ? counts[e["bedrooms"]]++ : counts[e["bedrooms"]]++);
+    return counts
 }

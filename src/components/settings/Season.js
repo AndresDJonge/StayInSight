@@ -13,7 +13,7 @@ import { getAveragePrices, getAveragePricePerDay } from "../../azure";
 export default ({ eventKey, data, setData }) => {
     const drawChart = async _ => {
         const pricePerDay = await getAveragePricePerDay(data.map(c => c["id"]))
-        console.log("input season chart: ", pricePerDay)
+        //console.log("input season chart: ", pricePerDay)
         _drawChart(pricePerDay)
     }
 
@@ -31,7 +31,7 @@ export default ({ eventKey, data, setData }) => {
             range
         )
 
-        console.log("before setting season:", results)
+        //console.log("before setting season:", results)
 
         const copy = Object.entries(data).map(([k, v]) => {
             var match = results.find(e => e["listing_id"] === v["id"])
@@ -47,7 +47,7 @@ export default ({ eventKey, data, setData }) => {
         setData([...copy])
     }
 
-    useEffect(() => { drawChart(0) }, [])
+    useEffect(() => drawChart(0), [])
 
     return (
         <Card>

@@ -16,7 +16,7 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData }
         if (_map.current) return
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/mapbox/streets-v12',
+            style: 'mapbox://styles/andresdejonge/clhyjvtnq009201qu1lhi0p3y',
             center: [lng, lat],
             zoom: zoom
         })

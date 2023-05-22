@@ -5,8 +5,8 @@ import * as d3 from "d3"
 
 export default (data) => {
     // width of the card itsef (card body is collapsed and has width 0)
-    document.getElementById("people-prices").innerHTML = ""
-    const realWidth = document.getElementById("people-prices").parentElement.parentElement.parentElement.offsetWidth
+    document.getElementById("season-chart").innerHTML = ""
+    const realWidth = document.getElementById("season-chart").parentElement.parentElement.parentElement.offsetWidth
 
     // set the dimensions and margins of the graph
     var margin = { top: 10, right: 40, bottom: 30, left: 60 },

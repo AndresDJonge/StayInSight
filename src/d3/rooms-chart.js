@@ -1,11 +1,14 @@
 import * as d3 from "d3"
 
-export default (data, selectedRange) => {
-    let margin = { top: 30, right: 30, bottom: 70, left: 50 },
-        width = 600 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+export default (data, selectedRoomsCount) => {
+    document.getElementById("rooms-chart").innerHTML = ""
+    const realWidth = document.getElementById("rooms-chart").parentElement.parentElement.parentElement.offsetWidth
 
-    const svg = d3.select("#people-prices")
+    let margin = { top: 30, right: 30, bottom: 70, left: 50 },
+        width = realWidth - margin.left - margin.right,
+        height = ((4 / 6) * realWidth) - margin.top - margin.bottom;
+
+    const svg = d3.select("#rooms-chart")
         .append('svg')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -15,7 +18,7 @@ export default (data, selectedRange) => {
     /* X-scale */
     let x = d3.scaleBand()
         .range([0, width])
-        .domain(data.map(i => i.persons))
+        .domain(["1", "2", "3", "4", "5", "6", "7", "8", "8+"])
         .padding(0.2);
 
     /* X-axis */
@@ -31,7 +34,7 @@ export default (data, selectedRange) => {
         .text('Maximum Occupancy Limit BnB')
 
     /* Y-scale */
-    const max = d3.max(data.map(i => i.value))
+    const max = d3.max(data)
     let y = d3.scaleLinear()
         .domain([0, max])
         .range([height, 0]);
@@ -47,52 +50,30 @@ export default (data, selectedRange) => {
         .attr("y", -margin.right - 5)
         .text('Price')
 
-    const bars = svg.selectAll("bar")
+    svg.selectAll("bar")
         .data(data)
         .enter()
         .append("rect")
-        .attr("x", function (d) {
-            return x(d.persons);
-        })
-        .attr("y", function (d) {
-            return y(d.value);
-        })
+        .attr("x", d => data.indexOf(d))
+        .attr("y", d => d)
         .attr("width", x.bandwidth())
-        .attr("height", function (d) {
-            return height - y(d.value);
-        })
+        .attr("height", d => height - y(d))
         .attr("fill", "#69b3a2")
-        .attr("fill-opacity", d => {
-            if (selectedRange[1] === 8 && d.persons >= 8) return 1
-            return !inRange(d.persons, selectedRange) ? 0.2 : 1
-        });
+        .attr("fill-opacity", d => d === selectedRoomsCount ? 1 : 0.2);
 
     svg.selectAll("bar-label")
         .data(data)
         .enter()
         .append("text")
-        .text(d => Number(d.value).toFixed(0))
-        .attr("x", function (d) {
-            return x(d.persons) + (x.bandwidth() / 2);
-        })
-        .attr("y", function (d) {
-            return y(d.value) - 10
-        })
+        .text(d => Number(d).toFixed(0))
+        .attr("x", d => { console.log("bar label x:", data.indexOf(d)); return x(data.indexOf(d)) + (x.bandwidth() / 2) })
+        .attr("y", d => y(d) - 10)
         .attr('text-anchor', 'middle')
         .attr('fill', 'black')
 }
 
-function inRange(x, range) {
-    return range[0] <= x && x <= range[1];
-}
-
-export function updateChart(data, selectedRange) {
-    const svg = d3.select("#people-prices");
-
+export function updateChart(data, selectedRoomsCount) {
+    const svg = d3.select("#rooms-chart");
     const bars = svg.selectAll('rect').data(data)
-
-    bars.attr("fill-opacity", d => {
-        if (selectedRange[1] === 8 && d.persons >= 8) return 1
-        return !inRange(d.persons, selectedRange) ? 0.2 : 1
-    });
+    bars.attr("fill-opacity", d => d === selectedRoomsCount ? 1 : 0.2);
 }

@@ -6,7 +6,7 @@ export default ({ data }) => {
     const [season, setSeaon] = useState("Winter")
 
     useEffect(() => {
-        console.log("Summary based on data: ", data)
+        //console.log("Summary based on data: ", data)
         const price = data.map(e => e.avg_price).reduce((a, cv) => a + cv, 0) / data.length
 
         setSeaon(data[0]["season"])
