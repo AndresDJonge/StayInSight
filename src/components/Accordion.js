@@ -37,8 +37,8 @@ export default function ({ staticData, data, setData }) {
         <Accordion id='accordion' defaultActiveKey={key} className='pb-5' style={{ height: "100vh", overflowY: 'scroll' }}>
             <Season eventKey={'0'} data={data} setData={setData} />
             <Rooms eventKey={'1'} data={data} filters={filters} setFilters={setFilters} />
-            <TypeDay eventKey={'2'} />
-            <Radius eventKey={'3'} />
+            <TypeDay eventKey={'2'} data={data} filters={filters} setFilters={setFilters}/>
+            <Radius eventKey={'3'} data={data} filters={filters} setFilters={setFilters}/>
             <Capacity eventKey={'4'} data={data} filters={filters} setFilters={setFilters} />
             <DayPrice eventKey={'5'} data={data} filters={filters} setFilters={setFilters} />
         </Accordion>
