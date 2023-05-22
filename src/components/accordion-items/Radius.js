@@ -48,7 +48,6 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
     function groupByDistance(data) {
         return data.reduce((groups, item) => {
             const dist = calculateDistance(item.latitude, item.longitude, marker)
-            //console.log("Distance: " + dist)
             const groupIndex = getDistanceIndex(dist)
             const group = (groups[groupIndex] || [])
             group.push(item)
@@ -69,7 +68,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
             const result = await getPriceByCapacity(k)
             return {
                 distance: k,
-                value: result[0]['$1']
+                value: result[0].$1
             };
         });
         Promise.all(promises).then(data => setPriceBins(data))
@@ -86,7 +85,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
                     value={value}
                     onChange={handleChange}
                     valueLabelFormat={valueRadiusText}
-                    valueLabelDisplay='on'
+                    valueLabelDisplay='auto'
                     step={1}
                     marks={marks}
                     min={minDistance}

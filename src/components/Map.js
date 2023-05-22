@@ -1,7 +1,7 @@
 import mapboxgl from 'mapbox-gl';
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 
-export default ({ borders, city, removeWaypoint, filteredData, setFilteredData, marker, setMarker }) => {
+export default ({borders, city, removeWaypoint, filteredData, setFilteredData, marker, setMarker}) => {
     mapboxgl.accessToken = "pk.eyJ1IjoiYW5kcmVzZGVqb25nZSIsImEiOiJjbGh5am1oNWcxNGtvM2lxYTQzMnBidWpvIn0.pPJCqvrKLJKeyQaWfZ7qvQ";
     const mapContainer = useRef(null);
     const map = useRef(null);
@@ -22,51 +22,10 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData, 
 
     // add marker on click
     const handleMapClick = (event) => {
-        const { lngLat } = event;
+        const {lngLat} = event;
         const longitude = lngLat.lng;
         const latitude = lngLat.lat;
-        setMarker({ latitude, longitude });
-    };
-
-
-    function place_marker(marker) {
-
-        if (map.current && marker && marker.latitude && marker.longitude) {
-
-            // remove old marker first
-            if (map.current.getSource('marker-source')) {
-                map.current.removeLayer('marker');
-                map.current.removeSource('marker-source');
-            }
-
-            /* MARKER */
-            map.current.addSource('marker-source', {
-                type: 'geojson',
-                data: {
-                    type: 'FeatureCollection',
-                    features: [
-                        {
-                            type: 'Feature',
-                            geometry: {
-                                type: 'Point',
-                                coordinates: [marker.longitude, marker.latitude]
-                            }
-                        }
-                    ]
-                }
-            });
-
-            map.current.addLayer({
-                id: 'marker',
-                type: 'circle',
-                source: 'marker-source',
-                paint: {
-                    'circle-radius': 6,
-                    // TODO change color or icon
-                    'circle-color': 'blue'
-                }
-            });
-        }
+        setMarker({latitude, longitude});
     };
 
     // load map source once when rendering for the first time
@@ -91,11 +50,10 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData, 
                 duration: 1500
             });
         }
-        // place marker at coordinates
-        place_marker(marker);
+        place_marker(marker, map)
     }, [marker]);
 
-    return <div ref={mapContainer} className="map-container" />;
+    return <div ref={mapContainer} className="map-container"/>;
 }
 
 // add initial standard data that only needs to be added once
@@ -126,6 +84,49 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
         'filter': ['==', '$type', 'Point']
     });
     setLoaded(true)
+    place_marker({
+        latitude: 34.052235,
+        longitude: -118.243683
+    }, map)
+}
+
+function place_marker(marker, map) {
+    if (map.current && marker && marker.latitude && marker.longitude) {
+
+        // remove old marker first
+        if (map.current.getSource('marker-source')) {
+            map.current.removeLayer('marker');
+            map.current.removeSource('marker-source');
+        }
+
+        /* MARKER */
+        map.current.addSource('marker-source', {
+            type: 'geojson',
+            data: {
+                type: 'FeatureCollection',
+                features: [
+                    {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: [marker.longitude, marker.latitude]
+                        }
+                    }
+                ]
+            }
+        });
+
+        map.current.addLayer({
+            id: 'marker',
+            type: 'circle',
+            source: 'marker-source',
+            paint: {
+                'circle-radius': 6,
+                // TODO change color or icon
+                'circle-color': 'blue'
+            }
+        });
+    }
 }
 
 const parseWaypoints = (values, borders) => Object({

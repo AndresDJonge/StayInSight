@@ -15,7 +15,7 @@ export default ({ filteredData }) => {
 
     return <div className="lead">
         {price ?
-            `You should ask €${Math.round(price, 2)} during ${season}` :
+            `You should ask $${Math.round(price).toFixed(2)} during ${season}` :
             'Select your parameters'
         }
     </div>
