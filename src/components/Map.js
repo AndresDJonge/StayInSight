@@ -17,7 +17,13 @@ export default ({ borders, city, removeWaypoint, filteredData, setFilteredData }
             container: mapContainer.current,
             style: 'mapbox://styles/andresdejonge/clhyjvtnq009201qu1lhi0p3y',
             center: [lng, lat],
-            zoom: zoom
+            zoom: zoom,
+
+            // this fixes a bug where fetching the tileset (when deployed) returns a HTTP 403
+            // https://github.com/mapbox/mapbox-gl-js/issues/12568
+            transformRequest: (url, _) => {
+                return { url, headers: { "Referrer-Policy": "origin-when-cross-origin" } }
+            }
         })
     }
 
