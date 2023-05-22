@@ -1,13 +1,13 @@
 import Accordion from "react-bootstrap/Accordion";
-import {Slider} from "@mui/material";
-import {useEffect, useState} from 'react'
-import {Card} from "react-bootstrap";
-import {CustomToggle} from "../CustomToggle";
+import { Slider } from "@mui/material";
+import { useEffect, useState } from 'react'
+import { Card } from "react-bootstrap";
+import { CustomToggle } from "../CustomToggle";
 import RadiusBarChart from "../RadiusBarChart";
 import { groupSort } from "d3";
 import { getAveragePriceByListingIds } from "../../azure";
 
-export default function({eventKey, data, filters, setFilters}) {
+export default function ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }) {
     const [value, setValue] = useState(40);
     const [priceBins, setPriceBins] = useState(null);
     const minDistance = 0;
@@ -15,9 +15,8 @@ export default function({eventKey, data, filters, setFilters}) {
     const centerLatitude = 34.052235;
     const centerLongitude = -118.243683;
 
-    useEffect(() => 
-    {
-        getGroupedData(data)
+    useEffect(() => {
+        getGroupedData(filteredData)
     }, [])
 
     const marks = [
@@ -31,9 +30,9 @@ export default function({eventKey, data, filters, setFilters}) {
     ];
 
     const handleChange = (event, newValue, activeThumb) => {
-        
+
         setValue(newValue)
-        
+
         filters = filters.filter(f => f.id !== eventKey)
         filters.push({
             id: eventKey,
@@ -43,15 +42,15 @@ export default function({eventKey, data, filters, setFilters}) {
         setFilters([...filters])
     }
 
-    function calculateDistance(lat1, lon1, lat2=centerLatitude, lon2=centerLongitude) {
+    function calculateDistance(lat1, lon1, lat2 = centerLatitude, lon2 = centerLongitude) {
         var R = 6371
         var dLat = toRad(lat2 - lat1);
-        var dLon = toRad(lon2-lon1);
+        var dLon = toRad(lon2 - lon1);
         var lat1 = toRad(lat1);
         var lat2 = toRad(lat2);
 
-        var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         var d = R * c;
         return d;
     }
@@ -86,7 +85,7 @@ export default function({eventKey, data, filters, setFilters}) {
     }
 
     function getPriceByCapacity(capacity) {
-        const candidates = data.filter(item =>
+        const candidates = filteredData.filter(item =>
             Number(getDistanceIndex(calculateDistance(item.latitude, item.longitude))) === Number(capacity)).map(i => i.id);
         console.log("Candidat" + candidates)
         return getAveragePriceByListingIds(candidates);
@@ -124,7 +123,7 @@ export default function({eventKey, data, filters, setFilters}) {
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>
-                <RadiusBarChart data={priceBins} selectedRange={value}/>
+                <RadiusBarChart data={priceBins} selectedRange={value} />
             </Card.Body>
         </Accordion.Collapse>
     </Card>

@@ -28,7 +28,7 @@ export default function ({ staticData, setStaticData, filteredData, setFilteredD
             <Season eventKey={'0'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
             <Rooms eventKey={'1'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
             <TypeDay eventKey={'2'} />
-            <Radius eventKey={'3'} />
+            <Radius eventKey={'3'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
             <Capacity eventKey={'4'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
             <DayPrice eventKey={'5'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
         </Accordion>
