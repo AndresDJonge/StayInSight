@@ -76,7 +76,7 @@ export default (data, selectedTypeOfDay) => {
         .data(data)
         .enter()
         .append("text")
-        .text(d => Number(d.value).toFixed(0))
+        .text(d => `$${Number(d.value).toFixed(0)}`)
         .attr("x", function (d) {
             return x(d.typeOfDay) + (x.bandwidth() / 2);
         })

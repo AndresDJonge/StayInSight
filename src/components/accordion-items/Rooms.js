@@ -18,11 +18,15 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
     const updateSelection = n => {
         filters = filters.filter(f => f.id !== `${eventKey}`)
 
-        filters.push({
-            id: `${eventKey}`,
-            func: bnb => radioValue === 5 ? bnb.bedrooms > 4 : bnb.bedrooms === n
-        })
-        setRadioValue(n)
+        console.log("before, n:", n, "radioValue:", radioValue)
+        if (n !== -1 && n !== radioValue) {
+            filters.push({
+                id: `${eventKey}`,
+                func: bnb => radioValue === 5 ? bnb.bedrooms > 4 : bnb.bedrooms === n
+            })
+            setRadioValue(n)
+        }
+        else setRadioValue(-1)
 
         setFilters([...filters])
     }
@@ -53,7 +57,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
                             name="radio"
                             value={radio.value}
                             checked={radioValue === radio.value}
-                            onChange={(e) => updateSelection(Number(e.currentTarget.value))}>
+                            onClick={_ => updateSelection(radio.value)}>
                             {radio.name}
                         </ToggleButton>
                     ))}
