@@ -19,6 +19,10 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
         getGroupedData(filteredData)
     }, [])
 
+    useEffect(() => {
+        updateFilter(value)
+    }, [marker])
+
     const marks = [
         { value: 1, label: '1km' },
         { value: 5, label: '5km' },
@@ -29,10 +33,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
         { value: 40, label: '40+km' },
     ];
 
-    const handleChange = (event, newValue, activeThumb) => {
-
-        setValue(newValue)
-
+    function updateFilter(newValue){
         filters = filters.filter(f => f.id !== eventKey)
         filters.push({
             id: eventKey,
@@ -40,6 +41,12 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
         })
 
         setFilters([...filters])
+    }
+
+    const handleChange = (event, newValue, activeThumb) => {
+
+        setValue(newValue)
+        updateFilter(newValue)
     }
 
     function groupByDistance(data) {

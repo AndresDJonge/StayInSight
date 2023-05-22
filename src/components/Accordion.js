@@ -23,6 +23,10 @@ export default function ({ staticData, setStaticData, filteredData, setFilteredD
         applyFilters()
     }, [filters])
 
+    useEffect(() => {
+        applyFilters()
+    }, [marker])
+
     return (
         <Accordion id='accordion' defaultActiveKey={key} className='pb-5' style={{ height: "100vh", overflowY: 'scroll' }}>
             <Season eventKey={'0'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
