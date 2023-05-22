@@ -1,6 +1,6 @@
 import { Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
+import {Card, Col, Placeholder, Row} from 'react-bootstrap';
 import Accordion from 'react-bootstrap/Accordion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSnowflake, faSun } from '@fortawesome/free-regular-svg-icons';
@@ -13,13 +13,11 @@ import { getAveragePrices, getAveragePricePerDay } from "../../azure";
 export default ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }) => {
     const drawChart = async _ => {
         const pricePerDay = await getAveragePricePerDay(staticData.map(c => c["id"]))
-        //console.log("input season chart: ", pricePerDay)
         _drawChart(pricePerDay)
     }
 
     const updateAvgPrices = async newVal => {
-        // console.log("data before SETTING AVG PRICES PER AIRBNB")
-        var range = []
+        let range = [];
 
         if (newVal === 0) range = [["2023-01-01", "2023-03-19"], ["2023-12-22", "2023-12-31"]]
         if (newVal === 1) range = [["2023-03-20", "2023-06-20"]]
@@ -32,13 +30,10 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
             range
         )
 
-        // console.log("results before setting season:", results)
-        // console.log("data before setting season:", staticData)
-
         const copy = Object.entries(staticData).map(([k, v]) => {
-            var match = results.find(e => e["listing_id"] === v["id"])
+            const match = results.find(e => e["listing_id"] === v["id"]);
 
-            var listing_copy = { ...v }
+            const listing_copy = {...v};
             listing_copy["avg_price"] = match["avg_price"]
             listing_copy["season"] = labels.find(e => e.value === newVal)["label"]
 
@@ -85,7 +80,6 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
                             defaultValue={0}
                             getAriaValueText={v => `${v}`}
                             valueLabelDisplay="off"
-                            //step={10} //  (waarvan middelste 4 de values)
                             marks={labels}
                             min={0}
                             max={3}
