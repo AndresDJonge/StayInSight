@@ -20,7 +20,6 @@ export default function({eventKey, data, filters, setFilters}) {
         getGroupedData(data)
     }, [])
 
-
     const marks = [
         { value: 1, label: '1km' },
         { value: 5, label: '5km' },
@@ -108,7 +107,7 @@ export default function({eventKey, data, filters, setFilters}) {
     return <Card>
         <Card.Header className='py-0 text-center'>
             <Slider
-                style={{color: '#4E5154', width: '90%'}}
+                style={{ color: '#4E5154', width: '90%' }}
                 className='mt-4'
                 aria-label='Radius'
                 defaultValue={value}
@@ -121,7 +120,7 @@ export default function({eventKey, data, filters, setFilters}) {
                 min={minDistance}
                 max={maxDistance}
             />
-            <CustomToggle eventKey={eventKey}/>
+            <CustomToggle eventKey={eventKey} />
         </Card.Header>
         <Accordion.Collapse eventKey={eventKey}>
             <Card.Body>

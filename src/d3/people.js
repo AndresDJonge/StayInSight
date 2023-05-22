@@ -1,9 +1,13 @@
 import * as d3 from "d3"
 
 export default (data, selectedRange) => {
-    let margin = {top: 30, right: 30, bottom: 70, left: 50},
-        width = 600 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+    // width of the card itsef (card body is collapsed and has width 0)
+    document.getElementById("people-prices").innerHTML = ""
+    const realWidth = document.getElementById("people-prices").parentElement.parentElement.parentElement.offsetWidth
+
+    let margin = { top: 30, right: 40, bottom: 70, left: 50 },
+        width = realWidth - margin.left - margin.right,
+        height = ((4 / 6) * realWidth) - margin.top - margin.bottom;
 
     const svg = d3.select("#people-prices")
         .append('svg')
@@ -12,8 +16,8 @@ export default (data, selectedRange) => {
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-        /* X-scale */
-        let x = d3.scaleBand()
+    /* X-scale */
+    let x = d3.scaleBand()
         .range([0, width])
         .domain(data.map(i => i.persons))
         .padding(0.2);
