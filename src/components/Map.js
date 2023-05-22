@@ -124,6 +124,20 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
         },
         'filter': ['==', '$type', 'Point']
     });
+
+    console.log("geJson: ", geoJson)
+    /* Draw the custom HTML markers */
+    const points = geoJson.data.features.filter(e => e["geometry"]["type"] === "Point")
+    console.log("Points:", points)
+    for (const feature of points) {
+        // create a HTML element for each feature
+        const el = document.createElement('div');
+        el.className = 'markerzzzzzzzzzz';
+
+        // make a marker for each feature and add to the map
+        const coords = [feature.geometry.coordinates[0], feature.geometry.coordinates[1]]
+        new mapboxgl.Marker(el).setLngLat(coords).addTo(map.current);
+    }
     setLoaded(true)
 }
 
