@@ -120,7 +120,7 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
         'source': city.key,
         'paint': {
             'circle-radius': 6,
-            'circle-color': colorMappings["color-primary-0"]
+            'circle-color': colorMappings["color-complement-4"]
         },
         'filter': ['==', '$type', 'Point']
     });
