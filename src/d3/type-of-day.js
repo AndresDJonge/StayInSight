@@ -5,12 +5,13 @@ const id = 'type-of-day'
 export default (data, selectedTypeOfDay) => {
     document.getElementById(id)
     const realWidth = document.getElementById(id).parentElement.parentElement.parentElement.offsetWidth
+    const maxHeight = 280
 
     data = sortData(data);
 
-    let margin = { top: 30, right: 40, bottom: 70, left: 70 },
+    let margin = { top: 30, right: 30, bottom: 30, left: 30 },
         width = realWidth - margin.left - margin.right,
-        height = ((4 / 6) * realWidth) - margin.top - margin.bottom;
+        height = maxHeight - margin.top - margin.bottom;
 
     const svg = d3.select(`#${id}`)
         .append('svg')
@@ -32,26 +33,26 @@ export default (data, selectedTypeOfDay) => {
         .call(d3.axisBottom(x))
         .selectAll('text')
         .style("text-anchor", "middle");
-
+/*
     svg.append('text')
         .attr('text-anchor', 'middle')
         .attr('x', width / 2)
-        .attr('y', height + margin.top + 20)
+        .attr('y', height + margin.top/2 + margin.bottom/2)
         .text('Type Of Day')
-
+*/
     /* Y-scale */
     const max = d3.max(data.map(i => i.value))
     let y = d3.scaleLinear()
         .domain([0, max])
         .range([height, 0]);
-
+/*
     svg.append('text')
         .attr('text-anchor', 'middle')
         .attr('transform', 'rotate(-90)')
         .attr("x", -height / 2)
         .attr("y", -margin.right - 5)
         .text('Price')
-
+*/
     const bars = svg.selectAll("bar")
         .data(data)
         .enter()

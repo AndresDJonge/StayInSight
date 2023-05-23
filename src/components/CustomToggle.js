@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import {AccordionContext, Button, useAccordionButton} from "react-bootstrap";
+import {AccordionContext, Button, useAccordionButton, Col} from "react-bootstrap";
 import {faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
@@ -17,7 +17,7 @@ export function CustomToggle({eventKey}) {
     }, [activeEventKey])
 
     return <div className='text-end'>
-        <Button variant='light' onClick={decoratedOnClick}>
+        <Button variant='light' size="sm" onClick={decoratedOnClick}>
             <FontAwesomeIcon icon={icon} />
         </Button>
     </div>

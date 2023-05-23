@@ -1,12 +1,12 @@
 import Accordion from "react-bootstrap/Accordion";
 import {useEffect, useState} from 'react';
-import { ButtonGroup, Card, ToggleButton } from "react-bootstrap";
+import { ButtonGroup, Card, ToggleButton, Col, Row } from "react-bootstrap";
 import { CustomToggle } from "../CustomToggle";
 import typeOfDay, {updateChart} from "../../d3/type-of-day";
 import {getAveragePricePerTypeDay} from "../../azure";
 
 export default function ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }) {
-    const [radioValue, setRadioValue] = useState(1);
+    const [radioValue, setRadioValue] = useState(null);
     const [dayBins, setDayBins] = useState(null);
     const radios = [
         { name: 'Weekday', value: 1 },
@@ -25,32 +25,40 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
         getGroupedData(setDayBins)
     }, [])
 
-    return <Card>
-        <Card.Header className='py-0 text-center'>
-            <ButtonGroup className='mt-3' aria-label='TypeOfDaySelector'>
-                {radios.map(radio => (
-                    <ToggleButton
-                        className='me-2 rounded'
-                        key={radio.value}
-                        id={`dayRadio-${radio.value}`}
-                        type="radio"
-                        variant={radioValue === radio.value ? 'dark' : 'outline-dark'}
-                        name="radio"
-                        value={radio.value}
-                        checked={radioValue === radio.value}
-                        onChange={(e) => setRadioValue(Number(e.currentTarget.value))}>
-                        {radio.name}
-                    </ToggleButton>
-                ))}
-            </ButtonGroup>
-            <CustomToggle eventKey={eventKey} />
-        </Card.Header>
-        <Accordion.Collapse eventKey={eventKey}>
-            <Card.Body>
-                <div id='type-of-day'/>
-            </Card.Body>
-        </Accordion.Collapse>
-    </Card>
+    return (
+        <Card>
+            <Card.Header className='text-center'>
+                <Row style={{ "width": "100%", marginLeft: "10px", paddingRight: "10px" }}>
+                    <Col xs={11} style={{padding:"0px", margin:"0px"}}>
+                        <ButtonGroup className='mt-3' aria-label='TypeOfDaySelector'>
+                            {radios.map(radio => (
+                                <ToggleButton
+                                    className='me-2 rounded'
+                                    key={radio.value}
+                                    id={`dayRadio-${radio.value}`}
+                                    type="radio"
+                                    variant={radioValue === radio.value ? 'dark' : 'outline-dark'}
+                                    name="radio"
+                                    value={radio.value}
+                                    checked={radioValue === radio.value}
+                                    onClick={_ => setRadioValue(radio.value)}>
+                                    {radio.name}
+                                </ToggleButton>
+                            ))}
+                        </ButtonGroup>
+                    </Col>
+                    <Col xs={1}>
+                        <CustomToggle eventKey={eventKey} />
+                    </Col>
+                </Row>
+            </Card.Header>
+            <Accordion.Collapse eventKey={eventKey}>
+                <Card.Body style={{ padding: '0px', overflow: 'hidden'}}>
+                    <div id='type-of-day'/>
+                </Card.Body>
+            </Accordion.Collapse>
+        </Card>
+    )
 }
 
 const dayMappings = [

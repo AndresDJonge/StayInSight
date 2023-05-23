@@ -51,7 +51,7 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
             <Card.Header>
                 <div className='lead text-center'>Season</div>
                 <Row style={{ "width": "100%", marginLeft: "10px", paddingRight: "10px" }}>
-                    <Col className='p-0' xs={12}>
+                    <Col className='p-0' xs={11}>
                         <Row>
                             <Col className='pr-0' xs={4}>
                                 <FontAwesomeIcon size='2x' icon={faSnowflake} className="color-primary-0"/>
@@ -71,7 +71,7 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
                             </Col>
                         </Row>
                     </Col>
-                    <Col xs={12}>
+                    <Col xs={11}>
                         <Slider
                             onChange={(_, newVal) => updateAvgPrices(newVal)}
                             style={{ color: '#4E5154' }}
@@ -85,11 +85,13 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
                             max={3}
                         />
                     </Col>
+                    <Col xs={1}>
+                        <CustomToggle eventKey={eventKey} />
+                    </Col>
                 </Row>
-                <CustomToggle eventKey={eventKey} />
             </Card.Header>
             <Accordion.Collapse eventKey={eventKey}>
-                <Card.Body>
+                <Card.Body style={{ padding: '0px', overflow: 'hidden'}}>
                     <div id="season" />
                 </Card.Body>
             </Accordion.Collapse>
