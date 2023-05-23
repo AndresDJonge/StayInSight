@@ -11,13 +11,14 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
     const [priceBins, setPriceBins] = useState(null);
     const minDistance = 0;
     const maxDistance = 40;
-
+/*
     useEffect(() => {
         getGroupedData(filteredData)
     }, [])
-
+*/
     useEffect(() => {
         updateFilter(value)
+        getGroupedData(filteredData)
     }, [marker])
 
     const marks = [
@@ -48,6 +49,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
     function groupByDistance(data) {
         return data.reduce((groups, item) => {
             const dist = calculateDistance(item.latitude, item.longitude, marker)
+            console.log("Distance: " + dist)
             const groupIndex = getDistanceIndex(dist)
             const group = (groups[groupIndex] || [])
             group.push(item)
@@ -103,8 +105,15 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
 }
 
 function calculateDistance(lat1, lon1, marker) {
-    let lat2 = marker.latitude
-    let lon2 = marker.longitude
+    let lat2, lon2
+
+    if (marker.latitude && marker.longitude) {
+        lat2 = marker.latitude
+        lon2 = marker.longitude
+    } else {
+        lat2 = 34.052235
+        lon2 = -118.243683
+    }
 
     let R = 6371
     let dLat = toRad(lat2 - lat1);

@@ -96,6 +96,10 @@ export function updateChart(data, selectedRange) {
     });
 }
 
+export function exists() {
+    return !d3.select("#radius-price").empty
+}
+
 var colorScale = d3.scaleOrdinal()
 .domain([
   "color-primary-0", "color-primary-1", "color-primary-2", "color-primary-3", "color-primary-4",

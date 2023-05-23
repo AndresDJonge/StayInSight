@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import radius, { updateChart } from "../d3/radius"
+import radius, { updateChart, exists } from "../d3/radius"
 import "../style/d3.css"
 
 export default ({ data, selectedRange }) => {
@@ -9,6 +9,7 @@ export default ({ data, selectedRange }) => {
     useEffect(() => {
         if (data !== null) {
             console.log("thomas data:", data)
+            document.getElementById(id).innerHTML = "" // clear previous graph
             radius(data, selectedRange)
         }
     }, [data])
