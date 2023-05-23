@@ -27,7 +27,8 @@ export default function ({ staticData, setStaticData, filteredData, setFilteredD
     }, [marker])
 
     return (
-        <Accordion id='accordion' defaultActiveKey={key} className='pb-5' style={{ height: "100vh", overflowY: 'scroll' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh'}}>
+        <Accordion id='accordion' defaultActiveKey={key} className='pb-5' style={{ flex: '1' }}>
             <Season eventKey={'0'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
             <Rooms eventKey={'1'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
             <TypeDay eventKey={'2'} />
@@ -35,5 +36,6 @@ export default function ({ staticData, setStaticData, filteredData, setFilteredD
             <Capacity eventKey={'4'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
             <DayPrice eventKey={'5'} {...{ filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }} />
         </Accordion>
+        </div>
     );
 }

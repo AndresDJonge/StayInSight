@@ -8,10 +8,11 @@ export default (data) => {
     // width of the card itsef (card body is collapsed and has width 0)
     document.getElementById("season").innerHTML = ""
     const realWidth = document.getElementById("season").parentElement.parentElement.parentElement.offsetWidth
+    const maxHeight = 280
 
-    let margin = {top: 30, right: 40, bottom: 70, left: 80},
+    let margin = { top: 30, right: 30, bottom: 30, left: 40 },
         width = realWidth - margin.left - margin.right,
-        height = ((4 / 6) * realWidth) - margin.top - margin.bottom;
+        height = maxHeight - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     var svg = d3.select("#season")

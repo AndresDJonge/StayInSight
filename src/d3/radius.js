@@ -2,9 +2,14 @@ import * as d3 from "d3"
 import { colorScale } from "./d3style";
 
 export default (data, selectedRange) => {
-    let margin = {top: 30, right: 30, bottom: 70, left: 50},
-        width = 600 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+    // width of the card itsef (card body is collapsed and has width 0)
+    document.getElementById("radius-prices").innerHTML = ""
+    const realWidth = document.getElementById("radius-prices").parentElement.parentElement.parentElement.offsetWidth
+    const maxHeight = 280
+
+    let margin = {top: 30, right: 30, bottom: 30, left: 30},
+        width = realWidth - margin.left - margin.right,
+        height = maxHeight - margin.top - margin.bottom;
 
     const svg = d3.select("#radius-prices")
         .append('svg')
@@ -25,12 +30,13 @@ export default (data, selectedRange) => {
         .call(d3.axisBottom(x))
         .selectAll('text')
         .style("text-anchor", "end");
+/*
     svg.append('text')
         .attr('text-anchor', 'middle')
         .attr('x', width / 2)
         .attr('y', height + margin.top + 20)
         .text('Maximum Occupancy Limit BnB')
-
+*/
     /* Y-scale */
     const max = d3.max(data.map(i => i.value))
     let y = d3.scaleLinear()
@@ -38,6 +44,7 @@ export default (data, selectedRange) => {
         .range([height, 0]);
 
     /* Y-axis */
+    /*
     svg.append("g")
         .call(d3.axisLeft(y));
 
@@ -47,7 +54,7 @@ export default (data, selectedRange) => {
         .attr("x", -height / 2)
         .attr("y", -margin.right - 5)
         .text('Price')
-
+*/
     const bars = svg.selectAll("bar")
         .data(data)
         .enter()
@@ -71,7 +78,7 @@ export default (data, selectedRange) => {
         .data(data)
         .enter()
         .append("text")
-        .text(d => Number(d.value).toFixed(0))
+        .text(d => '$' + Number(d.value).toFixed(0))
         .attr("x", function (d) {
             return x(d.distance) + (x.bandwidth() / 2);
         })

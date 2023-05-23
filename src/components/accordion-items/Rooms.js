@@ -1,18 +1,17 @@
 import Accordion from "react-bootstrap/Accordion";
-import { Button, ButtonGroup, Card, ToggleButton } from "react-bootstrap";
+import { ButtonGroup, Card, Col, Row, ToggleButton } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { Slider } from "@mui/material";
 import { CustomToggle } from "../CustomToggle";
 import drawChart from "../../d3/rooms";
 
 export default function ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }) {
-    const [radioValue, setRadioValue] = useState(1);
+    const [radioValue, setRadioValue] = useState(null);
     const radios = [
         { name: '1', value: 1 },
         { name: '2', value: 2 },
         { name: '3', value: 3 },
         { name: '4', value: 4 },
-        { name: '4+', value: 5 },
+        { name: '5+', value: 5 },
     ];
 
     const updateSelection = n => {
@@ -46,26 +45,32 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
         <Card>
             <Card.Header className='text-center'>
                 <div className='lead'>Bedrooms per BnB</div>
-                <ButtonGroup className='mt-3' aria-label='RoomsSelector'>
-                    {radios.map(radio => (
-                        <ToggleButton
-                            className='me-2 rounded'
-                            key={radio.value}
-                            id={`roomRadio-${radio.value}`}
-                            type="radio"
-                            variant={radioValue === radio.value ? 'dark' : 'outline-dark'}
-                            name="radio"
-                            value={radio.value}
-                            checked={radioValue === radio.value}
-                            onClick={_ => updateSelection(radio.value)}>
-                            {radio.name}
-                        </ToggleButton>
-                    ))}
-                </ButtonGroup>
-                <CustomToggle eventKey={eventKey} />
+                <Row style={{ "width": "100%", marginLeft: "10px", paddingRight: "10px" }}>
+                    <Col xs={11} style={{padding:"0px", margin:"0px"}}>
+                        <ButtonGroup className='mt-3' aria-label='RoomsSelector'>
+                            {radios.map(radio => (
+                                <ToggleButton
+                                    className='me-2 rounded'
+                                    key={radio.value}
+                                    id={`roomRadio-${radio.value}`}
+                                    type="radio"
+                                    variant={radioValue === radio.value ? 'dark' : 'outline-dark'}
+                                    name="radio"
+                                    value={radio.value}
+                                    checked={radioValue === radio.value}
+                                    onClick={_ => updateSelection(radio.value)}>
+                                    {radio.name}
+                                </ToggleButton>
+                            ))}
+                        </ButtonGroup>
+                    </Col>
+                    <Col xs={1}>
+                        <CustomToggle eventKey={eventKey} />
+                    </Col>
+                </Row>
             </Card.Header>
             <Accordion.Collapse eventKey={eventKey}>
-                <Card.Body>
+                <Card.Body style={{ padding: '0px', overflow: 'hidden'}}>
                     <div id="rooms"></div>
                 </Card.Body>
             </Accordion.Collapse>

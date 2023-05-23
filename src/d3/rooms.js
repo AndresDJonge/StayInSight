@@ -4,10 +4,11 @@ import { colorScale } from "./d3style";
 export default (data, selectedRoomsCount) => {
     document.getElementById("rooms").innerHTML = ""
     const realWidth = document.getElementById("rooms").parentElement.parentElement.parentElement.offsetWidth
+    const maxHeight = 280
 
-    let margin = { top: 30, right: 40, bottom: 70, left: 80 },
+    let margin = { top: 30, right: 30, bottom: 50, left: 40 },
         width = realWidth - margin.left - margin.right,
-        height = ((4 / 6) * realWidth) - margin.top - margin.bottom;
+        height = maxHeight - margin.top - margin.bottom;
 
     const svg = d3.select("#rooms")
         .append('svg')
@@ -33,7 +34,7 @@ export default (data, selectedRoomsCount) => {
     svg.append('text')
         .attr('text-anchor', 'middle')
         .attr('x', width / 2)
-        .attr('y', height + margin.top + 20)
+        .attr('y', height + margin.top/2 + margin.bottom/2)
         .text('Bedrooms')
 
     /* Y-scale */
@@ -43,6 +44,7 @@ export default (data, selectedRoomsCount) => {
         .range([height, 0]);
 
     /* Y-axis */
+    /*
     svg.append("g")
         .call(d3.axisLeft(y));
 
@@ -50,8 +52,9 @@ export default (data, selectedRoomsCount) => {
         .attr('text-anchor', 'middle')
         .attr('transform', 'rotate(-90)')
         .attr("x", -height / 2)
-        .attr("y", -margin.right - 5)
+        .attr("y", -margin.right/2)
         .text("Amount of AirBnB's")
+    */
 
     svg.selectAll("bar")
         .data(data)

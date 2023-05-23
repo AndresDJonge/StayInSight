@@ -7,10 +7,11 @@ export default (data, selectedRange) => {
     // width of the card itsef (card body is collapsed and has width 0)
     document.getElementById("price-per-day").innerHTML = ""
     const realWidth = document.getElementById("price-per-day").parentElement.parentElement.parentElement.offsetWidth
+    const maxHeight = 280
 
-    let margin = { top: 30, right: 40, bottom: 70, left: 40 },
+    let margin = { top: 30, right: 30, bottom: 50, left: 40 },
         width = realWidth - margin.left - margin.right,
-        height = ((4 / 6) * realWidth) - margin.top - margin.bottom;
+        height = maxHeight - margin.top - margin.bottom;
 
     const prices = getPrices(data);
 
@@ -38,8 +39,8 @@ export default (data, selectedRange) => {
 
     svg.append('text')
         .attr('text-anchor', 'middle')
-        .attr('x', width / 2 + margin.left)
-        .attr('y', height + margin.top + margin.bottom / 2)
+        .attr('x', width / 2)
+        .attr('y', height + margin.top/2 + margin.bottom/2)
         .text('Price bins ($)')
 
     /* Y-scale */

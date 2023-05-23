@@ -5,10 +5,11 @@ export default (data, selectedRange) => {
     // width of the card itsef (card body is collapsed and has width 0)
     document.getElementById("capacity").innerHTML = ""
     const realWidth = document.getElementById("capacity").parentElement.parentElement.parentElement.offsetWidth
+    const maxHeight = 280
 
-    let margin = { top: 30, right: 40, bottom: 70, left: 70 },
+    let margin = { top: 30, right: 30, bottom: 50, left: 30 },
         width = realWidth - margin.left - margin.right,
-        height = ((4 / 6) * realWidth) - margin.top - margin.bottom;
+        height = maxHeight - margin.top - margin.bottom;
 
     const svg = d3.select("#capacity")
         .append('svg')
@@ -32,7 +33,7 @@ export default (data, selectedRange) => {
     svg.append('text')
         .attr('text-anchor', 'middle')
         .attr('x', width / 2)
-        .attr('y', height + margin.top + 20)
+        .attr('y', height + margin.top/2 + margin.bottom/2)
         .text('Maximum Occupancy Limit BnB')
 
     /* Y-scale */
@@ -42,8 +43,9 @@ export default (data, selectedRange) => {
         .range([height, 0]);
 
     /* Y-axis */
-    //svg.append("g")
-    //    .call(d3.axisLeft(y));
+    /*
+    svg.append("g")
+        .call(d3.axisLeft(y));
 
     svg.append('text')
         .attr('text-anchor', 'middle')
@@ -51,6 +53,7 @@ export default (data, selectedRange) => {
         .attr("x", -height / 2)
         .attr("y", -margin.right - 5)
         .text('Price')
+    */
 
     const bars = svg.selectAll("bar")
         .data(data)
@@ -75,7 +78,7 @@ export default (data, selectedRange) => {
         .data(data)
         .enter()
         .append("text")
-        .text(d => Number(d.value).toFixed(0))
+        .text(d => '$' + Number(d.value).toFixed(0))
         .attr("x", function (d) {
             return x(d.persons) + (x.bandwidth() / 2);
         })

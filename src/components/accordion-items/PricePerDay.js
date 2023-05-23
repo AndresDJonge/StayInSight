@@ -1,7 +1,7 @@
 import Accordion from "react-bootstrap/Accordion";
 import { Slider } from "@mui/material";
 import { useEffect, useState } from 'react'
-import { Card } from "react-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 import { CustomToggle } from "../CustomToggle";
 import { getAveragePrices } from "../../azure";
 import "../../style/d3.css"
@@ -10,7 +10,7 @@ import dayprice, { updateChart } from "../../d3/price-per-day";
 export default function ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }) {
     const min = 0;
     const max = 750;
-    const [value, setValue] = useState([min + 20, max * 0.8]);
+    const [value, setValue] = useState([min, max]);
     const minDistance = 30;
     const [averagePrices, setAveragePrices] = useState(null);
 
@@ -57,23 +57,29 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
         <Card>
             <Card.Header className='text-center'>
                 <div className='lead'>Average price per day</div>
-                <Slider
-                    style={{ color: '#4E5154', width: '90%' }}
-                    className='mt-5'
-                    getAriaLabel={() => 'Price range'}
-                    value={value}
-                    onChange={handleChange}
-                    valueLabelFormat={valuetext}
-                    valueLabelDisplay="on"
-                    getAriaValueText={valuetext}
-                    disableSwap
-                    min={min}
-                    max={max}
-                />
-                <CustomToggle eventKey={eventKey} />
+                <Row style={{ "width": "100%", marginLeft: "10px", paddingRight: "10px" }}>
+                    <Col xs={11} style={{padding:"0px", margin:"0px"}}>
+                        <Slider
+                            style={{ color: '#4E5154', width: '100%' }}
+                            className='mt-5'
+                            getAriaLabel={() => 'Price range'}
+                            value={value}
+                            onChange={handleChange}
+                            valueLabelFormat={valuetext}
+                            valueLabelDisplay="on"
+                            getAriaValueText={valuetext}
+                            disableSwap
+                            min={min}
+                            max={max}
+                        />
+                    </Col>
+                    <Col xs={1}>
+                        <CustomToggle eventKey={eventKey} />
+                    </Col>
+                </Row>
             </Card.Header>
             <Accordion.Collapse eventKey={eventKey}>
-                <Card.Body>
+                <Card.Body style={{ padding: '0px', overflow: 'hidden'}}>
                     <div id={"price-per-day"} />
                 </Card.Body>
             </Accordion.Collapse>

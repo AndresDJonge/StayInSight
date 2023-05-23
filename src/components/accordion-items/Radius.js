@@ -1,7 +1,7 @@
 import Accordion from "react-bootstrap/Accordion";
 import {Slider} from "@mui/material";
 import {useEffect, useState} from 'react'
-import {Card} from "react-bootstrap";
+import {Card, Col, Row} from "react-bootstrap";
 import {CustomToggle} from "../CustomToggle";
 import RadiusBarChart from "../RadiusBarChart";
 import {getAveragePriceByListingIds} from "../../azure";
@@ -80,24 +80,30 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
     return (
         <Card>
             <Card.Header className='py-0 text-center'>
-                <Slider
-                    style={{ color: '#4E5154', width: '90%' }}
-                    className='mt-4'
-                    aria-label='Radius'
-                    defaultValue={value}
-                    value={value}
-                    onChange={handleChange}
-                    valueLabelFormat={valueRadiusText}
-                    valueLabelDisplay='auto'
-                    step={1}
-                    marks={marks}
-                    min={minDistance}
-                    max={maxDistance}
-                />
-                <CustomToggle eventKey={eventKey} />
+                <Row style={{ "width": "100%", marginLeft: "10px", paddingRight: "10px" }}>
+                    <Col xs={11} style={{padding:"0px", margin:"0px"}}>
+                        <Slider
+                            style={{ color: '#4E5154', width: '100%' }}
+                            className='mt-4'
+                            aria-label='Radius'
+                            defaultValue={value}
+                            value={value}
+                            onChange={handleChange}
+                            valueLabelFormat={valueRadiusText}
+                            valueLabelDisplay='auto'
+                            step={1}
+                            marks={marks}
+                            min={minDistance}
+                            max={maxDistance}
+                        />
+                    </Col>
+                    <Col xs={1}>
+                        <CustomToggle eventKey={eventKey} />
+                    </Col>
+                </Row>
             </Card.Header>
             <Accordion.Collapse eventKey={eventKey}>
-                <Card.Body>
+                <Card.Body style={{ padding: '0px', overflow: 'hidden'}}>
                     <RadiusBarChart data={priceBins} selectedRange={value} />
                 </Card.Body>
             </Accordion.Collapse>
