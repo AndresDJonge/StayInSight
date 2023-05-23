@@ -2,7 +2,7 @@ import mapboxgl from 'mapbox-gl';
 import {useEffect, useRef, useState} from "react";
 
 export default ({borders, city, removeWaypoint, filteredData, setFilteredData, marker, setMarker}) => {
-    mapboxgl.accessToken = "pk.eyJ1IjoiYW5kcmVzZGVqb25nZSIsImEiOiJjbGh5am1oNWcxNGtvM2lxYTQzMnBidWpvIn0.pPJCqvrKLJKeyQaWfZ7qvQ";
+    mapboxgl.accessToken = "pk.eyJ1IjoidGhvbWFzYnVzYWFua3VsIiwiYSI6ImNsaHozMTFyeDE5dzUzZHF3NWtjZnoxeG8ifQ.NMp5ROKDumopTIhDG5e1Mw";
     const mapContainer = useRef(null);
     const map = useRef(null);
     const [lng, setLng] = useState(city.lng);
@@ -14,7 +14,7 @@ export default ({borders, city, removeWaypoint, filteredData, setFilteredData, m
         if (_map.current) return
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
-            style: 'mapbox://styles/andresdejonge/clhyjvtnq009201qu1lhi0p3y',
+            style: 'mapbox://styles/thomasbusaankul/cli01yt2q02cn01qubync2who',
             center: [lng, lat],
             zoom: zoom,
         })
@@ -79,7 +79,17 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
         'source': city.key,
         'paint': {
             'circle-radius': 6,
-            'circle-color': colorMappings["color-primary-0"]
+            'circle-color': [
+                'case',
+                ['has', 'avg_price'],
+                [
+                    'case',
+                    ['<', ['get', 'avg_price'], 100], colorMappings["color-secondary-1-1"],
+                    ['<', ['get', 'avg_price'], 200], colorMappings["color-secondary-1-2"],
+                    colorMappings["color-secondary-1-0"]
+                ],
+                colorMappings["color-secondary-1-2"]
+            ]
         },
         'filter': ['==', '$type', 'Point']
     });
@@ -136,7 +146,7 @@ function place_marker(marker, map) {
             source: 'marker-source',
             paint: {
                 'circle-radius': 6,
-                'circle-color': colorMappings["color-secondary-1-4"]
+                'circle-color': 'red'
             }
         });
     }
@@ -180,7 +190,7 @@ var colorMappings = {
     "color-primary-4": "#0780E4",
     "color-secondary-1-0": "#5552F7",
     "color-secondary-1-1": "#A3A1FA",
-    "color-secondary-1-2": "#7976F8",
+    "color-secondary-1-2": "#7876F8",
     "color-secondary-1-3": "#302CF2",
     "color-secondary-1-4": "#140FE8",
     "color-secondary-2-0": "#FFCE37",

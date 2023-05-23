@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { colorScale } from "./d3style";
 
 const id = 'type-of-day'
 export default (data, selectedTypeOfDay) => {
@@ -65,11 +66,10 @@ export default (data, selectedTypeOfDay) => {
         .attr("height", function (d) {
             return height - y(d.value);
         })
-        .attr("fill", "#69b3a2")
-        .attr("fill-opacity", d => {
+        .attr("fill", d => {
             const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-            if (selectedTypeOfDay === 1) return weekdays.includes(d.typeOfDay) ? 1 : 0.2
-            else return weekdays.includes(d.typeOfDay) ? 0.2 : 1
+            if (selectedTypeOfDay === 1) return weekdays.includes(d.typeOfDay) ? colorScale("color-complement-4") : colorScale("color-complement-1")
+            else return weekdays.includes(d.typeOfDay) ? colorScale("color-complement-1") : colorScale("color-complement-4")
         });
 
     svg.selectAll("bar-label")
@@ -94,10 +94,10 @@ export function updateChart(data, selectedTypeOfDay) {
     data = sortData(data)
     const bars = svg.selectAll('rect').data(data)
 
-    bars.attr("fill-opacity", d => {
+    bars.attr("fill", d => {
         const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-        if (selectedTypeOfDay === 1) return weekdays.includes(d.typeOfDay) ? 1 : 0.2
-        else return weekdays.includes(d.typeOfDay) ? 0.2 : 1
+        if (selectedTypeOfDay === 1) return weekdays.includes(d.typeOfDay) ? colorScale("color-complement-4") : colorScale("color-complement-1")
+        else return weekdays.includes(d.typeOfDay) ? colorScale("color-complement-1") : colorScale("color-complement-4")
     });
 }
 

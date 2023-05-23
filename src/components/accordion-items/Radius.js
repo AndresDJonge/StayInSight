@@ -11,13 +11,14 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
     const [priceBins, setPriceBins] = useState(null);
     const minDistance = 0;
     const maxDistance = 40;
-
+/*
     useEffect(() => {
         getGroupedData(filteredData)
     }, [])
-
+*/
     useEffect(() => {
         updateFilter(value)
+        getGroupedData(filteredData)
     }, [marker])
 
     const marks = [
@@ -57,6 +58,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
     }
 
     function getPriceByCapacity(capacity) {
+        //console.log("capacity:" + capacity)
         const candidates = filteredData.filter(item =>
             Number(getDistanceIndex(calculateDistance(item.latitude, item.longitude, marker))) === Number(capacity)).map(i => i.id);
         return getAveragePriceByListingIds(candidates);
@@ -64,6 +66,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
 
     function getGroupedData(data) {
         const distanceGroups = groupByDistance(data)
+        //console.log("distance groups" + distanceGroups)
         const promises = Object.keys(distanceGroups).map(async k => {
             const result = await getPriceByCapacity(k)
             return {
@@ -103,8 +106,15 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
 }
 
 function calculateDistance(lat1, lon1, marker) {
-    let lat2 = marker.latitude
-    let lon2 = marker.longitude
+    let lat2, lon2
+
+    if (marker.latitude && marker.longitude) {
+        lat2 = marker.latitude
+        lon2 = marker.longitude
+    } else {
+        lat2 = 34.052235
+        lon2 = -118.243683
+    }
 
     let R = 6371
     let dLat = toRad(lat2 - lat1);
@@ -131,5 +141,4 @@ function getDistanceIndex(dist) {
     dist = Math.floor(dist / 5) * 5
     dist = dist >= 40 ? 40 : dist
     return dist
-    // return  dist >= 40 ? 40 : Math.floor(dist)
 }
