@@ -49,7 +49,6 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
     function groupByDistance(data) {
         return data.reduce((groups, item) => {
             const dist = calculateDistance(item.latitude, item.longitude, marker)
-            console.log("Distance: " + dist)
             const groupIndex = getDistanceIndex(dist)
             const group = (groups[groupIndex] || [])
             group.push(item)
