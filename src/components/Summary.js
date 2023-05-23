@@ -6,10 +6,11 @@ export default ({ filteredData }) => {
     const [season, setSeason] = useState("Winter")
 
     useEffect(() => {
-        const price = filteredData.map(e => e.avg_price).reduce((a, cv) => a + cv, 0) / filteredData.length
+        const price = filteredData.map(e => e.avg_price).reduce((a, cv) => a + cv, 0) / filteredData.length;
+        const season = filteredData[0] ? filteredData[0]["season"] : "the year";
 
-        setSeason(filteredData[0]["season"])
-        setPrice(price ? price : 0)
+        setSeason(season);
+        setPrice(price ? price : 0);
     }, [filteredData])
 
 

@@ -1,5 +1,5 @@
 import * as d3 from "d3"
-import { colorScale } from "./d3style";
+import {colorScale} from "./d3style";
 
 // Define a custom x-axis tick function
 
@@ -24,21 +24,25 @@ export default (data) => {
             "translate(" + margin.left + "," + margin.top + ")");
 
     const parsedData = data.map((e) => {
+        // convert all our dates to 2023
+        // by ignoring the year, we can plot a timeline from January to December on the x-axis
+        var stringDate2023 = "2023" + e.date.substring(4);
         return {
-            date: d3.timeParse("%Y-%m-%d")(e["date"]),
+            date: d3.timeParse("%Y-%m-%d")(stringDate2023),
             avg_price: +e["avg_price"]
         }
-    }).sort((a, b) => a["date"] - b["date"])
+    }).sort((a, b) => a.date - b.date);
 
     var customXAxis = (g) => {
-        g.call(d3.axisBottom(x).tickValues(parsedData.filter((d, i) => i % 61 === 0 || i === 0).map(d => d["date"])).tickFormat(d3.timeFormat("%B")));
+        g.call(d3.axisBottom(x).tickValues(parsedData.filter((d, i) => i % 61 === 0 || i === 0).map(d => d["date"])).tickFormat(d3.timeFormat("%b")));
     };
 
-    // console.log("eeeeeeeeeee: ", parsedData)
     // Add X axis --> it is a date format
     var x = d3.scaleTime()
         .domain(d3.extent(parsedData, d => d["date"]))
         .range([0, width]);
+
+
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x))
@@ -46,7 +50,7 @@ export default (data) => {
 
     // Add Y axis
     var y = d3.scaleLinear()
-        .domain([0, d3.max(parsedData, d => d["avg_price"])])
+        .domain([d3.min(parsedData, d => d["avg_price"]) - 20, d3.max(parsedData, d => d["avg_price"]) + 20])
         .range([height, 0]);
     svg.append("g")
         .call(d3.axisLeft(y));
@@ -61,7 +65,5 @@ export default (data) => {
             .x(d => x(d["date"]))
             .y(d => y(d["avg_price"]))
         )
-
-    // console.log("realdatazz:", parsedData)
 
 }
