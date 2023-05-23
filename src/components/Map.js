@@ -90,7 +90,6 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
                 ],
                 colorMappings["color-secondary-1-2"]
             ]
-            /**/
         },
         'filter': ['==', '$type', 'Point']
     });

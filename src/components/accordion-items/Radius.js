@@ -58,6 +58,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
     }
 
     function getPriceByCapacity(capacity) {
+        //console.log("capacity:" + capacity)
         const candidates = filteredData.filter(item =>
             Number(getDistanceIndex(calculateDistance(item.latitude, item.longitude, marker))) === Number(capacity)).map(i => i.id);
         return getAveragePriceByListingIds(candidates);
@@ -65,6 +66,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
 
     function getGroupedData(data) {
         const distanceGroups = groupByDistance(data)
+        //console.log("distance groups" + distanceGroups)
         const promises = Object.keys(distanceGroups).map(async k => {
             const result = await getPriceByCapacity(k)
             return {
@@ -139,5 +141,4 @@ function getDistanceIndex(dist) {
     dist = Math.floor(dist / 5) * 5
     dist = dist >= 40 ? 40 : dist
     return dist
-    // return  dist >= 40 ? 40 : Math.floor(dist)
 }
