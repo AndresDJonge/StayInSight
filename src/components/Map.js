@@ -80,19 +80,17 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
         'paint': {
             'circle-radius': 6,
             'circle-color': [
-                // placeholder kleuren
                 'case',
-                ['<', ['get', 'accommodates'], 2], 'red',
-                'green'
+                ['has', 'avg_price'],
+                [
+                    'case',
+                    ['<', ['get', 'avg_price'], 100], colorMappings["color-primary-2"],
+                    ['<', ['get', 'avg_price'], 200], colorMappings["color-primary-1"],
+                    colorMappings["color-primary-0"]
+                ],
+                colorMappings["color-primary-0"]
             ]
-            /* TODO: wanneer de properties het attribuut avg_price hebben, gebruik dit en verander kleuren
-            [
-                'case',
-                ['<', ['get', 'avg_price'], 100], 'red',
-                ['<', ['get', 'avg_price'], 200], 'blue',
-                'green'
-            ]
-            */
+            /**/
         },
         'filter': ['==', '$type', 'Point']
     });
