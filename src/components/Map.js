@@ -1,4 +1,5 @@
 import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 import {useEffect, useRef, useState} from "react";
 
 export default ({borders, city, removeWaypoint, filteredData, setFilteredData, marker, setMarker}) => {
@@ -103,6 +104,11 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
 
     let hoveredStateId = null;
 
+    const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false
+    });
+
     map.current.on('mouseenter', 'waypoints', (e) => {
         if (hoveredStateId !== null) {
             map.current.setFeatureState(
@@ -115,9 +121,32 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
             { source: city.key, id: hoveredStateId },
             { hover: true }
         )
+
+        const coords = e.features[0].geometry.coordinates.slice();
+        console.log("coords:" + coords)
+        const accommodates = e.features[0].properties.accommodates;
+        console.log("accommodates: " + accommodates)
+        const beds = e.features[0].properties.beds;
+        console.log("beds: " + beds)
+        const avg_price = e.features[0].properties.avg_price;
+        console.log("avg price: " + avg_price)
+
+        const text = '<p>Accommodates: ' + accommodates + '</p>' +
+            '<p>Beds: ' + beds + '</p>' +
+            '<p>Average Price: $' + avg_price + '</p>'
+
+        console.log("text: " + text)
+
+        while (Math.abs(e.lngLat.lng - coords[0]) > 180) {
+            coords[0] += e.lngLat.lng > coords[0] ? 360 : -360;
+            }
+
+        popup.setLngLat(coords).setHTML(text).addTo(map.current)
     });
 
     map.current.on('mouseleave', 'waypoints', (e) => {
+        map.current.getCanvas().style.cursor = '';
+
         if (hoveredStateId !== null) {
             map.current.setFeatureState(
                 { source: city.key, id: hoveredStateId },
@@ -125,6 +154,8 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
             )
         }
         hoveredStateId = null;
+
+        popup.remove()
     })
 
     console.log("geJson: ", geoJson)

@@ -13,6 +13,11 @@ code {
     monospace;
 }
 
+.mapboxgl-popup {
+  max-width: 400px;
+  font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  }
+
 .color-primary-0 { color: #42A4F5 }	/* Main Primary color */
 .color-primary-1 { color: #98CDF9 }
 .color-primary-2 { color: #69B7F7 }
