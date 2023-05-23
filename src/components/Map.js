@@ -88,7 +88,7 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
                     ['<', ['get', 'avg_price'], 200], colorMappings["color-secondary-1-2"],
                     colorMappings["color-secondary-1-0"]
                 ],
-                colorMappings["color-secondary-1-0"]
+                colorMappings["color-secondary-1-2"]
             ]
             /**/
         },

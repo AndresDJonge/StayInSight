@@ -1,4 +1,5 @@
 import * as d3 from "d3"
+import { colorScale } from "./d3style";
 
 // Define a custom x-axis tick function
 
@@ -53,7 +54,7 @@ export default (data) => {
     svg.append("path")
         .datum(parsedData)
         .attr("fill", "none")
-        .attr("stroke", "steelblue")
+        .attr("stroke", colorScale("color-complement-4"))
         .attr("stroke-width", 1.5)
         .attr("d", d3.line()
             .x(d => x(d["date"]))
