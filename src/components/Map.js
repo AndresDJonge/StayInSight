@@ -133,7 +133,7 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
 
         const text = '<p>Accommodates: ' + accommodates + '</p>' +
             '<p>Beds: ' + beds + '</p>' +
-            '<p>Average Price: $' + avg_price + '</p>'
+            '<p>Average Price: $' + Math.round(avg_price).toFixed(2) + '</p>'
 
         console.log("text: " + text)
 
