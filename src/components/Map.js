@@ -89,10 +89,43 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
                     colorMappings["color-secondary-1-0"]
                 ],
                 colorMappings["color-secondary-1-2"]
-            ]
+            ],
+            'circle-stroke-width': [
+                'case',
+                ['boolean', ['feature-state', 'hover'], false],
+                2,
+                0
+            ],
+            'circle-stroke-color': '#000000'
         },
         'filter': ['==', '$type', 'Point']
     });
+
+    let hoveredStateId = null;
+
+    map.current.on('mouseenter', 'waypoints', (e) => {
+        if (hoveredStateId !== null) {
+            map.current.setFeatureState(
+                { source: city.key, id: hoveredStateId },
+                { hover: false }
+            )
+        }
+        hoveredStateId = e.features[0].id;
+        map.current.setFeatureState(
+            { source: city.key, id: hoveredStateId },
+            { hover: true }
+        )
+    });
+
+    map.current.on('mouseleave', 'waypoints', (e) => {
+        if (hoveredStateId !== null) {
+            map.current.setFeatureState(
+                { source: city.key, id: hoveredStateId },
+                { hover: false }
+            )
+        }
+        hoveredStateId = null;
+    })
 
     console.log("geJson: ", geoJson)
     /* Draw the custom HTML markers */
@@ -166,6 +199,7 @@ const parseWaypoints = (values, borders) => Object({
                 }
             },
             ...values.map(el => Object({
+                id: el.id,
                 type: "Feature",
                 properties: {
                     ...el
