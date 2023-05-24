@@ -8,7 +8,7 @@ export default ({ data, selectedRange }) => {
     // Whenever the data changes -> re-render the chart
     useEffect(() => {
         if (data !== null) {
-            console.log("thomas data:", data)
+            //console.log("thomas data:", data)
             document.getElementById(id).innerHTML = "" // clear previous graph
             radius(data, selectedRange)
         }

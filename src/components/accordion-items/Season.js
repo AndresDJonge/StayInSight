@@ -13,6 +13,7 @@ import { getAveragePrices, getAveragePricePerDay } from "../../azure";
 export default ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }) => {
     const drawChart = async _ => {
         const pricePerDay = await getAveragePricePerDay(staticData.map(c => c["id"]))
+        //const pricePerDay = await getAveragePricePerDay(filteredData.map(c => c["id"]))
         _drawChart(pricePerDay)
     }
 
@@ -27,10 +28,12 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
 
         const results = await getAveragePrices(
             staticData.map(v => v.id),
+            //filteredData.map(v => v.id),
             range
         )
 
         const copy = Object.entries(staticData).map(([k, v]) => {
+        //const copy = Object.entries(filteredData).map(([k, v]) => {
             const match = results.find(e => e["listing_id"] === v["id"]);
 
             const listing_copy = {...v};
@@ -42,6 +45,7 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
 
 
         setStaticData([...copy])
+        setFilteredData([...copy])
     }
 
     useEffect(() => { drawChart(); updateAvgPrices(0) }, [])

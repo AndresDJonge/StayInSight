@@ -14,8 +14,15 @@ export default function ({ staticData, setStaticData, filteredData, setFilteredD
     // This filters the data based on all the filters of the accordion
     // To add a filter, you need an object { id: eventkey, func: filter predicate }
     const applyFilters = () => {
+
         const filteredData = staticData.filter(item => filters.every(f => f.func(item)))
         setFilteredData(filteredData)
+        /*
+        if (!filteredData)
+            setFilteredData(staticData.filter(item => filters.every(f => f.func(item))))
+        else
+            setFilteredData(filteredData.filter(item => filters.every(f => f.func(item))))
+            */
     }
 
     useEffect(() => {

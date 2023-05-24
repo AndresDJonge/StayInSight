@@ -20,7 +20,7 @@ export default (data, selectedTypeOfDay) => {
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    console.log('check')
+    //console.log('check')
     /* X-scale */
     let x = d3.scaleBand()
         .range([0, width])
@@ -89,7 +89,7 @@ export default (data, selectedTypeOfDay) => {
 }
 
 export function updateChart(data, selectedTypeOfDay) {
-    console.log(selectedTypeOfDay)
+    //console.log(selectedTypeOfDay)
     const svg = d3.select(`#${id}`);
 
     data = sortData(data)

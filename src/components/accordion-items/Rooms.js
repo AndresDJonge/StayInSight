@@ -17,7 +17,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
     const updateSelection = n => {
         filters = filters.filter(f => f.id !== `${eventKey}`)
 
-        console.log("before, n:", n, "radioValue:", radioValue)
+        //console.log("before, n:", n, "radioValue:", radioValue)
         if (n !== -1 && n !== radioValue) {
             filters.push({
                 id: `${eventKey}`,

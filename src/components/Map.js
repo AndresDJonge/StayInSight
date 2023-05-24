@@ -123,19 +123,19 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
         )
 
         const coords = e.features[0].geometry.coordinates.slice();
-        console.log("coords:" + coords)
+        //console.log("coords:" + coords)
         const accommodates = e.features[0].properties.accommodates;
-        console.log("accommodates: " + accommodates)
+        //console.log("accommodates: " + accommodates)
         const beds = e.features[0].properties.beds;
-        console.log("beds: " + beds)
+        //console.log("beds: " + beds)
         const avg_price = e.features[0].properties.avg_price;
-        console.log("avg price: " + avg_price)
+        //console.log("avg price: " + avg_price)
 
         const text = '<p>Accommodates: ' + accommodates + '</p>' +
             '<p>Beds: ' + beds + '</p>' +
             '<p>Average Price: $' + Math.round(avg_price).toFixed(2) + '</p>'
 
-        console.log("text: " + text)
+        //console.log("text: " + text)
 
         while (Math.abs(e.lngLat.lng - coords[0]) > 180) {
             coords[0] += e.lngLat.lng > coords[0] ? 360 : -360;
@@ -158,10 +158,10 @@ const initializeSources = (map, city, geoJson, setLoaded) => {
         popup.remove()
     })
 
-    console.log("geJson: ", geoJson)
+    //console.log("geJson: ", geoJson)
     /* Draw the custom HTML markers */
     const points = geoJson.data.features.filter(e => e["geometry"]["type"] === "Point")
-    console.log("Points:", points)
+    //console.log("Points:", points)
     for (const feature of points) {
         // create a HTML element for each feature
         const el = document.createElement('div');

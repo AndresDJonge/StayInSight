@@ -45,7 +45,7 @@ export default () => {
                     <Map {...{ borders, city, removeWaypoint, filteredData, setFilteredData, marker, setMarker }} />
                 </Col>
                 <Col xs={4}>
-                    <Summary {...{ filteredData }} />
+                    <Summary {...{ staticData, filteredData }} />
                     <Accordion {...{ staticData, setStaticData, filteredData, setFilteredData, marker, setMarker }} />
                 </Col>
             </Row>
