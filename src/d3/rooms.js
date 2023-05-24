@@ -23,8 +23,6 @@ export default (data, selectedRoomsCount) => {
         .domain(data.map(d => +d["rooms"]))
         .padding(0.2);
 
-    // console.log("domaon:", x.domain())
-
     /* X-axis */
     svg.append('g')
         .attr('transform', `translate(0, ${height})`)
@@ -38,32 +36,31 @@ export default (data, selectedRoomsCount) => {
         .text('Bedrooms')
 
     /* Y-scale */
-    const max = d3.max(data, d => d["value"])
+    const max = d3.max(data, d => d["avg_price"])
     let y = d3.scaleLinear()
         .domain([0, max])
         .range([height, 0]);
 
-    /* Y-axis */
-    /*
-    svg.append("g")
-        .call(d3.axisLeft(y));
+    // /* Y-axis */
+    // svg.append("g")
+    //     .call(d3.axisLeft(y));
 
-    svg.append('text')
-        .attr('text-anchor', 'middle')
-        .attr('transform', 'rotate(-90)')
-        .attr("x", -height / 2)
-        .attr("y", -margin.right/2)
-        .text("Amount of AirBnB's")
-    */
+    // svg.append('text')
+    //     .attr('text-anchor', 'middle')
+    //     .attr('transform', 'rotate(-90)')
+    //     .attr("x", -height / 2)
+    //     .attr("y", -margin.left/2 - 9)
+    //     .text("Amount of AirBnB's")
+
 
     svg.selectAll("bar")
         .data(data)
         .enter()
         .append("rect")
         .attr("x", d => x(d["rooms"]))
-        .attr("y", d => y("" + d["value"]))
+        .attr("y", d => y("" + d["avg_price"]))
         .attr("width", x.bandwidth())
-        .attr("height", d => height - y(d["value"]))
+        .attr("height", d => height - y(d["avg_price"]))
         .attr("fill",  d => {
             if (selectedRoomsCount > 4 && selectedRoomsCount <= +d["rooms"]) {
                 return colorScale("color-complement-4")
@@ -79,7 +76,7 @@ export default (data, selectedRoomsCount) => {
         .append("text")
         .text((d, i) => d["avg_price"] ? "$" + Number(d["avg_price"]).toFixed(0) : "")
         .attr("x", (d, i) => x(d['rooms']) + (x.bandwidth() / 2))
-        .attr("y", d => y("" + d["value"]) - 10)
+        .attr("y", d => y("" + d["avg_price"]) - 10)
         .attr('text-anchor', 'middle')
         .attr('fill', 'black')
 }
