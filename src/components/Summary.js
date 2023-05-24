@@ -13,12 +13,12 @@ export default ({ staticData, filteredData }) => {
     }, [staticData, filteredData])
 
 
-    return <div className="lead">
+    return <h3>
         {price ?
             `You should ask $${Math.round(price).toFixed(2)} during ${season}` :
             'Select your parameters'
         }
-    </div>
+    </h3>
 
 /*
     return <Placeholder as="p" animation="wave">
