@@ -90,7 +90,7 @@ function getGroupedData(setDayBins){
     const result = getAveragePricePerTypeDay();
     result.then(d => {
         d.forEach(el => {
-            console.log(el)
+            //console.log(el)
             const index = dayMappings.findIndex(item => Number(item.value) === Number(el.$1))
             dayBins.push({
                 typeOfDay: dayMappings[index].day,

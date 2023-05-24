@@ -58,7 +58,7 @@ export default function ({ eventKey, filters, setFilters, staticData, setStaticD
             <Card.Header className='text-center'>
                 <div className='lead'>Average price per day</div>
                 <Row style={{ "width": "100%", marginLeft: "10px", paddingRight: "10px" }}>
-                    <Col xs={11} style={{padding:"0px", margin:"0px"}}>
+                    <Col xs={11} style={{padding:"0px", paddingRight:"30px", margin:"0px"}}>
                         <Slider
                             style={{ color: '#4E5154', width: '100%' }}
                             className='mt-5'

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
-import Spinner from 'react-bootstrap/Spinner';
 
-export default ({ filteredData }) => {
+export default ({ staticData, filteredData }) => {
     const [price, setPrice] = useState(0)
     const [season, setSeason] = useState("Winter")
 
@@ -11,7 +10,7 @@ export default ({ filteredData }) => {
 
         setSeason(season);
         setPrice(price ? price : 0);
-    }, [filteredData])
+    }, [staticData, filteredData])
 
 
     return <div className="lead">
@@ -20,4 +19,10 @@ export default ({ filteredData }) => {
             'Select your parameters'
         }
     </div>
+
+/*
+    return <Placeholder as="p" animation="wave">
+        <Placeholder xs={12}/>
+    </Placeholder>
+         */
 }

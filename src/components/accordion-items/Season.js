@@ -13,6 +13,7 @@ import { getAveragePrices, getAveragePricePerDay } from "../../azure";
 export default ({ eventKey, filters, setFilters, staticData, setStaticData, filteredData, setFilteredData }) => {
     const drawChart = async _ => {
         const pricePerDay = await getAveragePricePerDay(staticData.map(c => c["id"]))
+        //const pricePerDay = await getAveragePricePerDay(filteredData.map(c => c["id"]))
         _drawChart(pricePerDay)
     }
 
@@ -27,10 +28,12 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
 
         const results = await getAveragePrices(
             staticData.map(v => v.id),
+            //filteredData.map(v => v.id),
             range
         )
 
         const copy = Object.entries(staticData).map(([k, v]) => {
+        //const copy = Object.entries(filteredData).map(([k, v]) => {
             const match = results.find(e => e["listing_id"] === v["id"]);
 
             const listing_copy = {...v};
@@ -42,6 +45,7 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
 
 
         setStaticData([...copy])
+        setFilteredData([...copy])
     }
 
     useEffect(() => { drawChart(); updateAvgPrices(0) }, [])
@@ -54,18 +58,18 @@ export default ({ eventKey, filters, setFilters, staticData, setStaticData, filt
                     <Col className='p-0' xs={11}>
                         <Row>
                             <Col className='pr-0' xs={4}>
-                                <FontAwesomeIcon size='2x' icon={faSnowflake} className="color-primary-0"/>
+                                <FontAwesomeIcon size='2x' icon={faSnowflake} color='#57A5DD'/>
                             </Col>
                             <Col className='p-0' xs={4}>
-                                <FontAwesomeIcon size='2x' icon={faLeaf} className="color-secondary-2-0" />
+                                <FontAwesomeIcon size='2x' icon={faLeaf} color='#9EC044' />
                             </Col>
                             <Col className='p-0' xs={4}>
                                 <Row>
                                     <Col className='p-0' style={{ marginLeft: "-10px" }}>
-                                        <FontAwesomeIcon size='2x' icon={faSun} className="color-complement-0" />
+                                        <FontAwesomeIcon size='2x' icon={faSun} color='#F7DB4E' />
                                     </Col>
                                     <Col className='pl-0 text-end' style={{ marginRight: '10px' }}>
-                                        <FontAwesomeIcon size='2x' icon={faCanadianMapleLeaf} className="color-secondary-1-0" />
+                                        <FontAwesomeIcon size='2x' icon={faCanadianMapleLeaf} color="#D85B32" />
                                     </Col>
                                 </Row>
                             </Col>
